@@ -8,42 +8,43 @@ from ggr import compute_phc, ggr
 
 
 def main():
-    # Example table with 3 fields: product_id, category, description
-    # Rows represent different records that would be sent to an LLM
+    # Example table with 4 fields: category, brand, product, category_code
+    # From README.md example demonstrating functional dependencies
+    # category (col 0) <-> category_code (col 3) are mutually dependent
+    # brand (col 1) <-> product (col 2) are mutually dependent
     table = np.array(
         [
-            ["P001", "Electronics", "Smartphone with 128GB storage"],
-            ["P002", "Electronics", "Laptop with 16GB RAM"],
-            ["P003", "Clothing", "Cotton T-shirt, size M"],
-            ["P004", "Electronics", "Wireless headphones"],
-            ["P005", "Clothing", "Denim jeans, size 32"],
-            ["P006", "Clothing", "Winter jacket, size L"],
+            ["Electronics", "Apple", "iPhone", "E"],
+            ["Clothing", "Nike", "Shoes", "C"],
+            ["Electronics", "Samsung", "TV", "E"],
+            ["Clothing", "Adidas", "Jacket", "C"],
+            ["Electronics", "Apple", "MacBook", "E"],
+            ["Clothing", "Nike", "T-Shirt", "C"],
         ],
         dtype=object,
     )
 
     print("Original Table:")
-    print("-" * 60)
+    print("-" * 70)
+    print(f"{'Row':<5} {'Category':<12} {'Brand':<10} {'Product':<10} {'Code':<5}")
+    print("-" * 70)
     for i, row in enumerate(table):
-        print(f"Row {i}: {list(row)}")
+        print(f"{i:<5} {row[0]:<12} {row[1]:<10} {row[2]:<10} {row[3]:<5}")
 
-    # Define functional dependencies
-    # In this example: product_id -> category (column 0 determines column 1)
-    # This means if we know the product_id, we know the category
-    functional_deps: dict[int, list[int]] = {
-        # No functional dependencies in this simple example
-    }
+    # Define functional dependencies as disjoint sets of mutually dependent columns
+    # FD group [0, 3]: category <-> category_code (bidirectional)
+    functional_deps: list[list[int]] = [[0, 3]]
 
-    print("\n" + "=" * 60)
+    print("\n" + "=" * 70)
     print("Running GGR Algorithm...")
-    print("=" * 60)
+    print("=" * 70)
 
     # Run GGR algorithm
     phc_score, reordered = ggr(table, functional_deps)
 
     print(f"\nComputed PHC Score: {phc_score:.2f}")
-    print("\nReordered Table:")
-    print("-" * 60)
+    print("\nReordered Table (rows and fields reordered for max prefix sharing):")
+    print("-" * 70)
     for i, row in enumerate(reordered):
         print(f"Row {i}: {row}")
 

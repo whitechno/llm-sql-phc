@@ -14,11 +14,31 @@ import numpy as np
 from numpy.typing import NDArray
 
 
+def get_inferred_cols(col_idx: int, fd_groups: list[list[int]]) -> list[int]:
+    """
+    Find all columns that are functionally dependent on the given column.
+
+    FD groups are disjoint sets of mutually dependent column indices.
+    If col_idx is in a group, all other columns in that group are inferred.
+
+    Args:
+        col_idx: The column index to find dependencies for
+        fd_groups: List of disjoint sets of mutually dependent column indices
+
+    Returns:
+        List of column indices that are inferred from col_idx (excluding col_idx itself)
+    """
+    for group in fd_groups:
+        if col_idx in group:
+            return [c for c in group if c != col_idx]
+    return []
+
+
 def hitcount(
     value: str,
     col_idx: int,
     table: NDArray,
-    functional_deps: dict[int, list[int]],
+    functional_deps: list[list[int]],
 ) -> tuple[float, list[int]]:
     """
     Calculate the hit count for a specific value in a column.
@@ -27,8 +47,7 @@ def hitcount(
         value: The value to calculate hit count for
         col_idx: The column index where the value is located
         table: The input table as a 2D numpy array of strings
-        functional_deps: Dictionary mapping column index to list of
-                        functionally dependent column indices
+        functional_deps: List of disjoint sets of mutually dependent column indices
 
     Returns:
         Tuple of (hit_count, list of column indices including inferred columns)
@@ -44,7 +63,7 @@ def hitcount(
         return 0.0, [col_idx]
 
     # Line 5: inferred_cols ← {c' | (c, c') ∈ FD}
-    inferred_cols = functional_deps.get(col_idx, [])
+    inferred_cols = get_inferred_cols(col_idx, functional_deps)
 
     # Line 6: tot_len = len(v)² + Σ_{c'∈inferred_cols} (Σ_{r∈Rv} len(T[r,c'])) / |Rv|
     tot_len = len(value) ** 2
@@ -64,7 +83,7 @@ def hitcount(
 
 def ggr(
     table: NDArray,
-    functional_deps: dict[int, list[int]],
+    functional_deps: list[list[int]],
     col_indices: list[int] | None = None,
 ) -> tuple[float, list[list[str]]]:
     """
@@ -72,8 +91,7 @@ def ggr(
 
     Args:
         table: Input table as a 2D numpy array of strings
-        functional_deps: Dictionary mapping column index to list of
-                        functionally dependent column indices
+        functional_deps: List of disjoint sets of mutually dependent column indices
         col_indices: Current column indices being considered (used in recursion)
 
     Returns:

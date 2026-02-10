@@ -85,7 +85,8 @@ def ggr(
     table: NDArray,
     functional_deps: list[list[int]],
     col_indices: list[int] | None = None,
-) -> tuple[float, list[list[str]]]:
+    row_indices: list[int] | None = None,
+) -> tuple[float, list[list[str]], list[list[int]], list[int]]:
     """
     Greedy Group Recursion algorithm for maximizing prefix hit count.
 
@@ -93,9 +94,12 @@ def ggr(
         table: Input table as a 2D numpy array of strings
         functional_deps: List of disjoint sets of mutually dependent column indices
         col_indices: Current column indices being considered (used in recursion)
+        row_indices: Original row indices being considered (used in recursion)
 
     Returns:
-        Tuple of (prefix_hit_count, reordered_list_of_tuples)
+        Tuple of (prefix_hit_count, reordered_values, reordered_col_indices, original_row_indices)
+        where reordered_col_indices[i] is the column order for row i
+        and original_row_indices[i] is the original row number for row i
     """
     n_rows, n_cols = table.shape
 
@@ -103,9 +107,13 @@ def ggr(
     if col_indices is None:
         col_indices = list(range(n_cols))
 
+    # Initialize row indices if not provided
+    if row_indices is None:
+        row_indices = list(range(n_rows))
+
     # Line 10-12: Base case - single row
     if n_rows == 1:
-        return 0.0, [list(table[0, col_indices])]
+        return 0.0, [list(table[0, col_indices])], [col_indices], [row_indices[0]]
 
     # Line 13-16: Base case - single column
     if len(col_indices) == 1:
@@ -120,8 +128,10 @@ def ggr(
         # Sort rows by the single column value
         sorted_indices = np.argsort(table[:, col])
         sorted_rows = [[table[i, col]] for i in sorted_indices]
+        col_orders = [[col] for _ in sorted_indices]
+        orig_rows = [row_indices[i] for i in sorted_indices]
 
-        return total_score, sorted_rows
+        return total_score, sorted_rows, col_orders, orig_rows
 
     # Line 17: Initialize best values
     max_hc = -1.0
@@ -142,7 +152,12 @@ def ggr(
 
     # If no good grouping found, return rows as-is
     if best_value is None or best_col is None:
-        return 0.0, [list(table[i, col_indices]) for i in range(n_rows)]
+        return (
+            0.0,
+            [list(table[i, col_indices]) for i in range(n_rows)],
+            [col_indices for _ in range(n_rows)],
+            row_indices,
+        )
 
     # Line 24: R_v ← {i | T[i, b_c] = b_v}
     matching_mask = table[:, best_col] == best_value
@@ -153,10 +168,13 @@ def ggr(
     # Recurse on rows NOT containing the best value
     if len(non_matching_row_indices) > 0:
         subtable_a = table[non_matching_row_indices]
-        a_hc, l_a = ggr(subtable_a, functional_deps, col_indices)
+        rows_a = [row_indices[i] for i in non_matching_row_indices]
+        a_hc, l_a, cols_a, orig_a = ggr(subtable_a, functional_deps, col_indices, rows_a)
     else:
         a_hc = 0.0
         l_a = []
+        cols_a = []
+        orig_a = []
 
     # Line 26: B_HC, L_B ← GGR(T[R_v, cols \ b_cols], FD)
     # Recurse on matching rows, excluding the best columns
@@ -164,10 +182,13 @@ def ggr(
 
     if len(matching_row_indices) > 0 and len(remaining_cols) > 0:
         subtable_b = table[matching_row_indices]
-        b_hc, l_b = ggr(subtable_b, functional_deps, remaining_cols)
+        rows_b = [row_indices[i] for i in matching_row_indices]
+        b_hc, l_b, cols_b, orig_b = ggr(subtable_b, functional_deps, remaining_cols, rows_b)
     else:
         b_hc = 0.0
         l_b = [[] for _ in matching_row_indices]
+        cols_b = [[] for _ in matching_row_indices]
+        orig_b = [row_indices[i] for i in matching_row_indices]
 
     # Line 27: C_HC, _ ← HITCOUNT(b_v, b_c, T, FD)
     c_hc, _ = hitcount(best_value, best_col, table, functional_deps)
@@ -181,14 +202,18 @@ def ggr(
 
     # Combine prefix with remaining values for matching rows
     reordered_matching = []
+    cols_matching = []
     for i, row_result in enumerate(l_b):
         reordered_row = prefix_values + row_result
         reordered_matching.append(reordered_row)
+        cols_matching.append(best_cols + cols_b[i])
 
     # Combine: matching rows (with prefix) + non-matching rows
     result_list = reordered_matching + l_a
+    result_cols = cols_matching + cols_a
+    result_orig = orig_b + orig_a
 
-    return total_score, result_list
+    return total_score, result_list, result_cols, result_orig
 
 
 def compute_phc(reordered_list: list[list[str]]) -> float:

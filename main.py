@@ -40,13 +40,13 @@ def main():
     print("=" * 70)
 
     # Run GGR algorithm
-    phc_score, reordered = ggr(table, functional_deps)
+    phc_score, reordered, col_orders, orig_rows = ggr(table, functional_deps)
 
     print(f"\nComputed PHC Score: {phc_score:.2f}")
     print("\nReordered Table (rows and fields reordered for max prefix sharing):")
     print("-" * 70)
-    for i, row in enumerate(reordered):
-        print(f"Row {i}: {row}")
+    for i, (row, cols, orig) in enumerate(zip(reordered, col_orders, orig_rows)):
+        print(f"Row {i} (orig {orig}): {cols} {row}")
 
     # Verify with actual PHC computation
     actual_phc = compute_phc(reordered)

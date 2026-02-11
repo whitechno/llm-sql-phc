@@ -17,7 +17,7 @@ def main():
             ["Electronics", "Apple", "iPhone", "E"],
             ["Clothing", "Nike", "Shoes", "C"],
             ["Electronics", "Samsung", "TV", "E"],
-            ["Clothing", "Adidas", "Jacket", "C"],
+            ["Clothing", "Adidas", "Shoes", "C"],  # try changing "Shoes" to "Jacket"
             ["Electronics", "Apple", "MacBook", "E"],
             ["Clothing", "Nike", "T-Shirt", "C"],
         ],

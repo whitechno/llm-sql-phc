@@ -3,6 +3,7 @@ Greedy Group Recursion (GGR) Algorithm
 
 Implementation based on Algorithm 1 from:
 "Optimizing LLM Queries in Relational Data Analytics Workloads"
+(with several typos fixed)
 
 The algorithm reorders rows and fields of an input table to maximize
 prefix hit count (PHC) for KV cache reuse in LLM inference.
@@ -72,7 +73,7 @@ def hitcount(
         # Calculate average length of values in inferred column for matching rows
         lengths_sum = sum(len(table[r, inferred_col]) for r in matching_rows)
         avg_len = lengths_sum / num_matching
-        tot_len += avg_len
+        tot_len += avg_len ** 2
 
     # Line 7: return tot_len × (|Rv| − 1), [c] + inferred_cols
     hit_count = tot_len * (num_matching - 1)

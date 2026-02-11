@@ -16,12 +16,12 @@ def main():
     # brand (col 1) <-> product (col 2) are mutually dependent
     table = np.array(
         [
-            ["Electronics", "Apple", "iPhone", "E"],
-            ["Clothing", "Nike", "Shoes", "C"],
-            ["Electronics", "Samsung", "TV", "E"],
-            ["Clothing", "Adidas", "Shoes", "C"],  # try changing "Shoes" to "Jacket"
-            ["Electronics", "Apple", "MacBook", "E"],
-            ["Clothing", "Nike", "T-Shirt", "C"],
+            ["Electronics", "Apple", "iPhone", "EL"],
+            ["Clothing", "Nike", "Shoes", "CL"],
+            ["Electronics", "Samsung", "TV", "EL"],
+            ["Clothing", "Adidas", "Shoes", "CL"],  # try changing "Shoes" to "Jacket"
+            ["Electronics", "Apple", "MacBook", "EL"],
+            ["Clothing", "Nike", "T-Shirt", "CL"],
         ],
         dtype=object,
     )

@@ -40,9 +40,12 @@ def main():
     print("=" * 70)
 
     # Run GGR algorithm
-    phc_score, reordered, col_orders, orig_rows = ggr(table, functional_deps)
+    phc_score, reordered, col_orders, orig_rows, recursion_count = ggr(
+        table, functional_deps
+    )
 
     print(f"\nComputed PHC Score: {phc_score:.2f}")
+    print(f"Recursion iterations: {recursion_count}")
     print("\nReordered Table (rows and fields reordered for max prefix sharing):")
     print("-" * 70)
     for i, (row, cols, orig) in enumerate(zip(reordered, col_orders, orig_rows)):

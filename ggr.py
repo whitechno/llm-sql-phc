@@ -86,7 +86,7 @@ def ggr(
     functional_deps: list[list[int]],
     col_indices: list[int] | None = None,
     row_indices: list[int] | None = None,
-) -> tuple[float, list[list[str]], list[list[int]], list[int]]:
+) -> tuple[float, list[list[str]], list[list[int]], list[int], int]:
     """
     Greedy Group Recursion algorithm for maximizing prefix hit count.
 
@@ -97,9 +97,11 @@ def ggr(
         row_indices: Original row indices being considered (used in recursion)
 
     Returns:
-        Tuple of (prefix_hit_count, reordered_values, reordered_col_indices, original_row_indices)
-        where reordered_col_indices[i] is the column order for row i
-        and original_row_indices[i] is the original row number for row i
+        Tuple of (prefix_hit_count, reordered_values, reordered_col_indices,
+                  original_row_indices, recursion_count)
+        where reordered_col_indices[i] is the column order for row i,
+        original_row_indices[i] is the original row number for row i,
+        and recursion_count is the total number of ggr() calls
     """
     n_rows, n_cols = table.shape
 
@@ -113,7 +115,7 @@ def ggr(
 
     # Line 10-12: Base case - single row
     if n_rows == 1:
-        return 0.0, [list(table[0, col_indices])], [col_indices], [row_indices[0]]
+        return 0.0, [list(table[0, col_indices])], [col_indices], [row_indices[0]], 1
 
     # Line 13-16: Base case - single column
     if len(col_indices) == 1:
@@ -131,7 +133,7 @@ def ggr(
         col_orders = [[col] for _ in sorted_indices]
         orig_rows = [row_indices[i] for i in sorted_indices]
 
-        return total_score, sorted_rows, col_orders, orig_rows
+        return total_score, sorted_rows, col_orders, orig_rows, 1
 
     # Line 17: Initialize best values
     max_hc = -1.0
@@ -157,6 +159,7 @@ def ggr(
             [list(table[i, col_indices]) for i in range(n_rows)],
             [col_indices for _ in range(n_rows)],
             row_indices,
+            1,
         )
 
     # Line 24: R_v ← {i | T[i, b_c] = b_v}
@@ -169,12 +172,15 @@ def ggr(
     if len(non_matching_row_indices) > 0:
         subtable_a = table[non_matching_row_indices]
         rows_a = [row_indices[i] for i in non_matching_row_indices]
-        a_hc, l_a, cols_a, orig_a = ggr(subtable_a, functional_deps, col_indices, rows_a)
+        a_hc, l_a, cols_a, orig_a, count_a = ggr(
+            subtable_a, functional_deps, col_indices, rows_a
+        )
     else:
         a_hc = 0.0
         l_a = []
         cols_a = []
         orig_a = []
+        count_a = 0
 
     # Line 26: B_HC, L_B ← GGR(T[R_v, cols \ b_cols], FD)
     # Recurse on matching rows, excluding the best columns
@@ -183,12 +189,15 @@ def ggr(
     if len(matching_row_indices) > 0 and len(remaining_cols) > 0:
         subtable_b = table[matching_row_indices]
         rows_b = [row_indices[i] for i in matching_row_indices]
-        b_hc, l_b, cols_b, orig_b = ggr(subtable_b, functional_deps, remaining_cols, rows_b)
+        b_hc, l_b, cols_b, orig_b, count_b = ggr(
+            subtable_b, functional_deps, remaining_cols, rows_b
+        )
     else:
         b_hc = 0.0
         l_b = [[] for _ in matching_row_indices]
         cols_b = [[] for _ in matching_row_indices]
         orig_b = [row_indices[i] for i in matching_row_indices]
+        count_b = 0
 
     # Line 27: C_HC, _ ← HITCOUNT(b_v, b_c, T, FD)
     c_hc, _ = hitcount(best_value, best_col, table, functional_deps)
@@ -212,8 +221,9 @@ def ggr(
     result_list = reordered_matching + l_a
     result_cols = cols_matching + cols_a
     result_orig = orig_b + orig_a
+    total_count = 1 + count_a + count_b
 
-    return total_score, result_list, result_cols, result_orig
+    return total_score, result_list, result_cols, result_orig, total_count
 
 
 def compute_phc(reordered_list: list[list[str]]) -> float:

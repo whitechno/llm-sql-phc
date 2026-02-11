@@ -26,10 +26,10 @@ def main():
 
     print("Original Table:")
     print("-" * 70)
-    print(f"{'Row':<5} {'Category':<12} {'Brand':<10} {'Product':<10} {'Code':<5}")
+    print(f"{'Row':<5} {'0 Category':<14} {'1 Brand':<10} {'2 Product':<12} {'3 Code':<7}")
     print("-" * 70)
     for i, row in enumerate(table):
-        print(f"{i:<5} {row[0]:<12} {row[1]:<10} {row[2]:<10} {row[3]:<5}")
+        print(f"{i:<5} {row[0]:<14} {row[1]:<10} {row[2]:<12} {row[3]:<7}")
 
     # Define functional dependencies as disjoint sets of mutually dependent columns
     # FD group [0, 3]: category <-> category_code (bidirectional)
@@ -49,7 +49,7 @@ def main():
     print("\nReordered Table (rows and fields reordered for max prefix sharing):")
     print("-" * 70)
     for i, (row, cols, orig) in enumerate(zip(reordered, col_orders, orig_rows)):
-        print(f"Row {i} (orig {orig}): {cols} {row}")
+        print(f"{i}: ({orig}, {cols}) {row}")
 
     # Verify with actual PHC computation
     actual_phc = compute_phc(reordered)

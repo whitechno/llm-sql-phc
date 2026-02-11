@@ -3,7 +3,7 @@ Greedy Group Recursion (GGR) Algorithm
 
 Implementation based on Algorithm 1 from:
 "Optimizing LLM Queries in Relational Data Analytics Workloads"
-(with several typos fixed)
+(after several typos fixed)
 
 The algorithm reorders rows and fields of an input table to maximize
 prefix hit count (PHC) for KV cache reuse in LLM inference.

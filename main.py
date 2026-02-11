@@ -13,7 +13,6 @@ def main():
     # Example table with 4 fields: category, brand, product, category_code
     # From README.md example demonstrating functional dependencies
     # category (col 0) <-> category_code (col 3) are mutually dependent
-    # brand (col 1) <-> product (col 2) are mutually dependent
     table = np.array(
         [
             ["Electronics", "Apple", "iPhone", "EL"],
@@ -66,7 +65,7 @@ def main():
     print(f"\nVerified PHC: {actual_phc:.2f}")
     print(f"Verified PHR: {actual_phr:.2f}%")
 
-    # Compare with original order
+    # Compare with the original order
     original_list = [list(row) for row in table]
     original_phc = compute_phc(original_list)
     original_phr = (original_phc / ideal_phc) * 100 if ideal_phc > 0 else 0

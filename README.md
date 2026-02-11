@@ -1,5 +1,13 @@
 # Greedy Group Recursion (GGR) algorithm for optimizing LLM queries
 
+This repository contains the code for the reference implementation of the Greedy
+Group Recursion (GGR) algorithm published in the following paper:
+[Optimizing LLM Queries in Relational Data Analytics Workloads](
+https://arxiv.org/pdf/2403.05821). Implementation follows closely the
+specification of the algorithm as presented in the paper except for fixing
+several obvious typos. (See the last section
+in [docs/llm-sql-phc.md](./docs/llm-sql-phc.md))
+
 ### Functional Dependency (FD) definition
 
 Two columns `A` and `B` are in FD rule `A <-> B` if, for any two rows `r1` and
@@ -43,4 +51,39 @@ Row   Category     Brand      Product    Code
 3     Clothing     Adidas     Jacket     C    
 4     Electronics  Apple      MacBook    E    
 5     Clothing     Nike       T-Shirt    C
+```
+
+### Run `main.py`
+
+Run `uv run python main.py` to see this output:
+```text
+Original Table:
+----------------------------------------------------------------------
+Row   0 Category     1 Brand    2 Product    3 Code 
+----------------------------------------------------------------------
+0     Electronics    Apple      iPhone       EL     
+1     Clothing       Nike       Shoes        CL     
+2     Electronics    Samsung    TV           EL     
+3     Clothing       Adidas     Shoes        CL     
+4     Electronics    Apple      MacBook      EL     
+5     Clothing       Nike       T-Shirt      CL 
+
+Computed PHC Score: 436.00
+Recursion iterations: 8
+Duration: 0.012496 sec
+
+Reordered Table (rows and fields reordered for max prefix sharing):
+----------------------------------------------------------------------
+0: (4, [0, 3, 1, 2]) ['Electronics', 'EL', 'Apple', 'MacBook']
+1: (0, [0, 3, 1, 2]) ['Electronics', 'EL', 'Apple', 'iPhone']
+2: (2, [0, 3, 1, 2]) ['Electronics', 'EL', 'Samsung', 'TV']
+3: (3, [0, 3, 2, 1]) ['Clothing', 'CL', 'Shoes', 'Adidas']
+4: (1, [0, 3, 2, 1]) ['Clothing', 'CL', 'Shoes', 'Nike']
+5: (5, [0, 3, 1, 2]) ['Clothing', 'CL', 'Nike', 'T-Shirt']
+
+Verified PHC: 436.00
+Verified PHR: 46.68%
+Original Order PHC: 0.00
+Original Order PHR: 0.00%
+Ideal PHC: 934.00
 ```

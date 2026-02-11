@@ -57,18 +57,23 @@ def main():
     for i, (row, cols, orig) in enumerate(zip(reordered, col_orders, orig_rows)):
         print(f"{i}: ({orig}, {cols}) {row}")
 
+    # Ideal PHC: sum of squared lengths of all values in the table
+    ideal_phc = sum(len(val) ** 2 for row in table for val in row)
+
     # Verify with actual PHC computation
     actual_phc = compute_phc(reordered)
+    actual_phr = (actual_phc / ideal_phc) * 100 if ideal_phc > 0 else 0
     print(f"\nVerified PHC: {actual_phc:.2f}")
+    print(f"Verified PHR: {actual_phr:.2f}%")
 
     # Compare with original order
     original_list = [list(row) for row in table]
     original_phc = compute_phc(original_list)
+    original_phr = (original_phc / ideal_phc) * 100 if ideal_phc > 0 else 0
     print(f"Original Order PHC: {original_phc:.2f}")
+    print(f"Original Order PHR: {original_phr:.2f}%")
 
-    if actual_phc > original_phc:
-        improvement = ((actual_phc - original_phc) / max(original_phc, 1)) * 100
-        print(f"\nImprovement: {improvement:.1f}% better PHC with reordering")
+    print(f"Ideal PHC: {ideal_phc:.2f}")
 
 
 if __name__ == "__main__":

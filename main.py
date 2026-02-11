@@ -2,6 +2,8 @@
 Demo of the Greedy Group Recursion (GGR) algorithm.
 """
 
+import time
+
 import numpy as np
 
 from ggr import compute_phc, ggr
@@ -40,12 +42,16 @@ def main():
     print("=" * 70)
 
     # Run GGR algorithm
+    start_time = time.perf_counter()
     phc_score, reordered, col_orders, orig_rows, recursion_count = ggr(
         table, functional_deps
     )
+    end_time = time.perf_counter()
+    duration = end_time - start_time
 
     print(f"\nComputed PHC Score: {phc_score:.2f}")
     print(f"Recursion iterations: {recursion_count}")
+    print(f"Duration: {duration:.6f} sec")
     print("\nReordered Table (rows and fields reordered for max prefix sharing):")
     print("-" * 70)
     for i, (row, cols, orig) in enumerate(zip(reordered, col_orders, orig_rows)):

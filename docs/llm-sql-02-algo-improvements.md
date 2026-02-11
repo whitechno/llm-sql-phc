@@ -1,22 +1,6 @@
-Optimizing LLM Queries: Comments and Suggestions
+Optimizing LLM Queries 2: Algorithm improvements
 ================================================
 February 2, 2026
-
-Main publication:  
-[[LLM-SQL](https://arxiv.org/pdf/2403.05821)] "Optimizing LLM Queries in
-Relational Data Analytics Workloads", 9 Apr 2025.
-
-Followup publication with AI-driven algorithm improvement:  
-[[AI-Sys](https://arxiv.org/pdf/2512.14806)] "Let the Barbarians In: How AI Can
-Accelerate Systems Performance Research", Section 4.4, 22 Dec 2025.
-
-[LLM-SQL] presents a "Greedy Group Recursion" (GGR) algorithm for optimizing LLM
-queries by finding (a `n x m`) table re-arrangement that maximizes the LLM's KV
-cache prefix hit count (PHC). Compared to the brute-force algorithm that
-requires `n!*(m!)^n` potential orderings, GGR significantly reduces the search
-space by selecting the highest-hit value and then reducing the dimensions of the
-table at each recursive step with the maximum depth of recursion `O(min(n,m))`.
-GGR achieves close-to-perfect PHC output with fast practical execution time.
 
 Here we propose several adjustments to the GGR algorithm that improve the
 output (moving it closer to the optimal solution) and also further improve the
@@ -25,33 +9,7 @@ execution time.
 Algorithm improvements
 ----------------------
 
-See code specification of Greedy Group Recursion (GGR) algorithm on page 5 of
-the [LLM-SQL] paper.
-
-At each recursive step, the GGR algorithm scans the table (lines 17–23) to find
-all distinct values with corresponding hit counts (lines 3–8). It then selects
-the highest-hit value `b_v` (with corresponding column `b_c`) and splits the
-table into two sub-tables - one with all the rows `R_v` containing `b_v` value
-in `b_c` column excluding the field where the value is located in, and another
-sub-table with the remaining rows. It then recurses on the two sub-tables (lines
-24–26) and calculates the total PHC as the sum of PHC of the sub-tables and
-contributions of `b_v` (line 28).
-
-There are three cases when GGR algorithm can be _proven_ to achieve the optimal
-PHC output:
-1. Table contains only a single row. Then PHC is zero and the table is not
-   rearranged. (Lines 10–12.)
-2. Table contains only a single column. Then the table with sorted column values
-   is returned and PHC is trivially computed. (Lines 13–16.)
-3. Table contains one field `A` that functionally determines all other fields of
-   a table. Then GGR algorithm prioritizes groups of values in `A` due to the
-   accumulated hit count score (lines 3–8), capturing key correlations early and
-   producing the optimal reordering. You can think of this as an extension of
-   #2 - a table with a single column.
-
-All three cases also serve as recursion termination conditions.
-
-### Recursion early termination when only distinct values are present
+### Recursion early termination when all distinct values have count 1
 
 If table scan tells that all values in the table are distinct (each appearing in
 exactly one row), the algorithm terminates early and returns the `PHC=0` of the
@@ -334,6 +292,12 @@ especially during the first several iterations.
 Note that this adjustment does not improve the output optimality but has the
 potential to speed up the execution time.
 
+### Faster table scan with FD rules and table statistics
+
+At each recursive step, the GGR algorithm scans the table (lines 17–23) to find
+all distinct values with corresponding hit counts. It can result in quadratic
+complexity in terms of table size.
+
 ### Ad-hoc heuristics for correlated distinct values
 
 GGR algorithm takes full advantage of the table's Functional Dependency (FD)
@@ -358,7 +322,7 @@ part of a Table Statistics calculation that runs every iteration step.
 Similarly to FD rules, this technique improves the output optimality and reduces
 the number of iterations.
 
-Here is an example of a table where this technique can be applied:
+**Example 1** of a table where this technique improves the output optimality:
 ```text
 | A | B | C |
 |---|---|---|
@@ -402,57 +366,76 @@ outputs the optimal solution:
 ```
 with `PHC = 4 + 1 + 1 = 6` (`PHR = 6/15 = 40%`).
 
-In case of a tie, i.e., when `HC(b,B) + HC(c,C) = HC(a,A)`, we select the
-multi-column block.
+This example can be generalized to groups spanning any number of rows. With
+`|R_a| = K`, `HC(a,A) = K - 1`, `R_b = R_c = R_bc`, `|R_bc| = K-1`, and
+`HC(b,B) = HC(c,C) = K - 2`, we have `HC(b,B) + HC(c,C) = 2(K-2) > HC(a,A)`. In
+the worst-case-scenario, GGR outputs `PHC = 3K-7` and adjusted GGR outputs
+`PHC = 3K-6`, only a hit count difference of `1` independent of `K`.
 
+**Case of a tie**
+There could be a case of a tie, i.e., when `HC(b,B) + HC(c,C) = HC(a,A)`. We
+break a tie by selecting a multi-column block.
+
+Here is a simple but important example of the smallest block size with a tie
+where the adjusted GGR algorithm improves optimality:
+```text
+| A | B | C |
+|---|---|---|
+| a |   |   |
+| a |   |   |
+| a | b | c |
+|   | b | c |
+```
+with `HC(a,A) = 2`, `HC(b,B) = HC(c,C) = 1`, and `HC(b,B) + HC(c,C) = HC(a,A)`
+(a tie).
+
+GGR algorithm selects `a, A` to split the table and outputs
+```text
+| A |  | B | C |
+|---|  |---|---|
+| a |  |   |   |
+| a |  |   |   |
+| a |  | b | c |
+
+| A | B | C |
+|---|---|---|
+|   | b | c |
+```
+with `PHC = 2 + 0 = 2` (`PHR = 2/12 = 16.7%`).
+
+Adjusted GGR algorithm selects `[(b,B),(c,C)]` block to split the table and
+outputs the optimal solution:
+```text
+| B | C |  | A |
+|---|---|  |---|
+| b | c |  | a |
+| b | c |  |   |
+
+| A | B | C |
+|---|---|---|
+| a |   |   |
+| a |   |   |
+```
+with `PHC = 2 + 1 = 3` (`PHR = 3/12 = 25%`).
+
+This example is important because we can have tables with a relatively large
+number of blocks like this:
+```text
+| a |   |   |
+| a |   |   |
+| a | b | c |
+|   | b | c |
+```
+Let's say that there are `K` independent blocks like this in the table. Then GGR
+algorithm will output `PHC = 2K` and adjusted GGR algorithm will output
+`PHC = 3K`, the difference growing linearly with `K`.
+
+**Benefits of this heuristic adjustment**
 How really beneficial is this data-heuristics-driven algorithm adjustment in
 practice? Especially weighted by the complexity of implementation and additional
 computational cost of the hash table creation? The answer depends on the
 structure of the table. There are cases of the data sets with strong correlation
-between some distinct values. Also, as recursion iterations start processing
+between some distinct values. Also, as recursion iterations step down to
 distinct values with fewer rows, the probability of them sharing the same rows
 increases. As a general recommendation, it is worth considering this heuristic
 adjustment only if the table has a high correlation between distinct values.
-
-Minor typos in equations
-------------------------
-
-### Typo 1
-
-On page 3, the equation (2) should have `1 <= c <= m` rather than `0 <= c < m`,
-as it appears that everywhere else in the paper both rows and columns are
-counted from `1` (to `n` and `m` respectively).
-
-### Typo 2
-
-On page 5, in the "Algorithm 1 Greedy Group Recursion" code specification, line
-6: the contribution of each inferred column `c'` should have its value length to
-be squared too `len(v')^2`, where `v'` is the inferred column `c'` value derived
-from value `v` of parent column `c` based on the table's Functional Dependency
-(FD) rules. Line 6 should read:
-```text
-tot_len = len(v)^2 + SUM_c'[len(v')^2]
-```
-There is also no need to average `len(T[r,c'])` over rows in `R_v` because all
-values `v' = T[r,c']` are the same for all `r` in `R_v`.
-
-### Typo 3
-
-On page 5, in the "Algorithm 1 Greedy Group Recursion" code specification, line
-29: when prepending max group value `b_v` to `L_B[i]`, it should also include
-all values `b_vals` inferred from `b_c` by applying Functional Dependency (FD)
-rules. Line 29 should be changed to:
-```text
-L <- [[b_v] + b_vals + L_B[i] | for i in R_v] + L_A
-```
-(Also note that line 29 mixed up `L_B` and `L_A` variables.)
-
-`b_vals` should be computed in `HitCount` function with modified line 7:
-```text
-return tot_len * (|R_v| - 1), [c] + inferred_cols, inferred_vals
-```
-
-Then line 27 should be changed to
-```text
-C_HC, _, b_vals <- HitCount(b_v, b_c, T, FD)
-```

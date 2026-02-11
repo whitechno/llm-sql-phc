@@ -6,7 +6,7 @@ Group Recursion (GGR) algorithm published in the following paper:
 https://arxiv.org/pdf/2403.05821). Implementation follows closely the
 specification of the algorithm as presented in the paper except for fixing
 several obvious typos. (See the last section
-in [docs/llm-sql-phc.md](./docs/llm-sql-phc.md))
+in [docs/llm-sql-phc.md](docs/llm-sql-01-reference.md))
 
 ### Functional Dependency (FD) definition
 

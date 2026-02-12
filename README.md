@@ -5,8 +5,8 @@ Group Recursion (GGR) algorithm published in the following paper:
 [Optimizing LLM Queries in Relational Data Analytics Workloads](
 https://arxiv.org/pdf/2403.05821). Implementation follows closely the
 specification of the algorithm as presented in the paper except for fixing
-several obvious typos. (See the last section
-in [docs/llm-sql-phc.md](docs/llm-sql-01-reference.md))
+several obvious typos.
+(See [docs/llm-sql-01-reference.md](docs/llm-sql-01-reference.md))
 
 ### Functional Dependency (FD) definition
 

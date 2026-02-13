@@ -3,12 +3,12 @@ Optimizing LLM Queries 1: Reference and Typos
 February 2, 2026
 
 Main publication:  
-[[LLM-SQL](https://arxiv.org/pdf/2403.05821)] "Optimizing LLM Queries in
+[[LLM-SQL](https://arxiv.org/abs/2403.05821)] "Optimizing LLM Queries in
 Relational Data Analytics Workloads", 9 Apr 2025.
 
 Followup publication with AI-Driven Research for Systems (ADRS) algorithm
 improvement:  
-[[AI-Sys](https://arxiv.org/pdf/2512.14806)] "Let the Barbarians In: How AI Can
+[[AI-Sys](https://arxiv.org/abs/2512.14806)] "Let the Barbarians In: How AI Can
 Accelerate Systems Performance Research", Section 4.4, 22 Dec 2025.
 
 GGR algorithm description

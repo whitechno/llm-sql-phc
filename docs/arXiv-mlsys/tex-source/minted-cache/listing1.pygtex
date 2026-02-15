@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{user\PYGZus{}id}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{request}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{support\PYGZus{}response}\PYG{p}{,}
+\PYG{+w}{  }\PYG{n}{LLM}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Did \PYGZob{}support\PYGZus{}response\PYGZcb{} address \PYGZob{}request\PYGZcb{}?\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{support\PYGZus{}response}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{request}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{AS}\PYG{+w}{ }\PYG{n}{success}
+\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{customer\PYGZus{}tickets}
+\PYG{k}{WHERE}\PYG{+w}{ }\PYG{n}{support\PYGZus{}response}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZgt{}}\PYG{+w}{ }\PYG{k}{NULL}
+\end{Verbatim}

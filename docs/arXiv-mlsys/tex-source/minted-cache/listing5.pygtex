@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{LLM}\PYG{p}{(}
+\PYG{+w}{    }\PYG{l+s+s1}{\PYGZsq{}Given the information about a movie, summarize the good qualities that led to a favorable rating.\PYGZsq{}}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{reviewtype}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{reviewcontent}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{movieinfo}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{genres}
+\PYG{p}{)}
+\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{MOVIES}
+\PYG{k}{WHERE}\PYG{+w}{ }\PYG{n}{LLM}\PYG{p}{(}
+\PYG{+w}{    }\PYG{l+s+s1}{\PYGZsq{}Given the following review, answer whether the sentiment is \PYGZdq{}POSITIVE\PYGZdq{} or \PYGZdq{}NEGATIVE\PYGZdq{}. Respond ONLY with \PYGZdq{}POSITIVE\PYGZdq{} or \PYGZdq{}NEGATIVE\PYGZdq{}, in all caps.\PYGZsq{}}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{reviewcontent}
+\PYG{p}{)}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}NEGATIVE\PYGZsq{}}
+\end{Verbatim}

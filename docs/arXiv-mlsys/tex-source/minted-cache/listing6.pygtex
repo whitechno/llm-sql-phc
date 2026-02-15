@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{k}{AVG}\PYG{p}{(}
+\PYG{+w}{    }\PYG{n}{LLM}\PYG{p}{(}
+\PYG{+w}{        }\PYG{l+s+s1}{\PYGZsq{}Rate sentiment in numerical values from 1 (bad) to 5 (good).\PYGZsq{}}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{reviewcontent}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{movieinfo}
+\PYG{+w}{    }\PYG{p}{)}
+\PYG{p}{)}\PYG{+w}{ }\PYG{k}{AS}\PYG{+w}{ }\PYG{n}{AverageScore}
+\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{MOVIES}
+\end{Verbatim}

@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{LLM}\PYG{p}{(}\PYG{l+s+ss}{\PYGZdq{}Summarize: \PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{pr}\PYG{p}{.}\PYG{o}{*}\PYG{p}{)}
+\PYG{k}{FROM}\PYG{+w}{ }\PYG{p}{(}
+\PYG{+w}{    }\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{review}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{rating}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{description}
+\PYG{+w}{    }\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{reviews}\PYG{+w}{ }\PYG{n}{r}\PYG{+w}{ }\PYG{k}{JOIN}\PYG{+w}{ }\PYG{n}{product}\PYG{+w}{ }\PYG{n}{p}\PYG{+w}{ }\PYG{k}{ON}\PYG{+w}{ }\PYG{n}{r}\PYG{p}{.}\PYG{n}{asin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{.}\PYG{n}{asin}
+\PYG{p}{)}\PYG{+w}{ }\PYG{k}{AS}\PYG{+w}{ }\PYG{n}{pr}
+\end{Verbatim}

@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{t}\PYG{p}{.}\PYG{n}{movietitle}
+\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{MOVIES}
+\PYG{k}{WHERE}\PYG{+w}{ }\PYG{n}{LLM}\PYG{p}{(}
+\PYG{+w}{    }\PYG{l+s+s1}{\PYGZsq{}Given the following fields, determine whether the movie is suitable for kids. Answer ONLY with \PYGZdq{}Yes\PYGZdq{} or \PYGZdq{}No\PYGZdq{}.\PYGZsq{}}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{movieinfo}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{reviewcontent}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{reviewtype}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{movietitle}
+\PYG{p}{)}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}Yes\PYGZsq{}}
+\end{Verbatim}

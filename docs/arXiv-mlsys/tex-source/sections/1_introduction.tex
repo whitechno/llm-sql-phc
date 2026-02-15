@@ -1,0 +1,11 @@
+\section{Introduction}
+
+There has been growing research on LLM inference optimization.
+In particular, recent
+work~\cite{liu2025optimizingllmqueriesrelational, cheng2025letbarbariansinai}
+presents solutions to optimize relational data analytics workloads for offline LLM inference.
+It proposes Greedy Group Recursion (GGR), an approximate
+algorithm that leverages functional dependencies (such as
+primary and foreign key relationships from the data schema)
+and table statistics, which are readily available in many
+databases and analytics systems, to reduce the search space.

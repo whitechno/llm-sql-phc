@@ -1,0 +1,208 @@
+%%%%%%%% ML-SYS EXAMPLE LATEX SUBMISSION FILE %%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+
+% Recommended, but optional, packages for figures and better typesetting:
+\usepackage{microtype}
+\usepackage{graphicx}
+% \usepackage{subfigure}
+\usepackage{booktabs} % for professional tables
+
+%%%%%%%%%%%%% PACKAGE
+\usepackage{tabularx}
+\usepackage{array}
+\setlength{\tabcolsep}{3pt} % Adjust horizontal padding if needed
+\usepackage{makecell}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{listingsutf8}
+
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-}
+\usepackage{color}
+\usepackage{listings} % Make sure this is included
+
+\usepackage[frozencache,cachedir=minted-cache]{minted}
+
+% \usepackage[noend]{algorithmic}
+\usepackage{mdframed}
+% \usepackage{sectsty}
+% \usepackage{algorithm}
+% \usepackage{algpseudocode}
+
+\usepackage{eqparbox}
+% subfigures
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amsthm,thmtools}
+\usepackage{multirow}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
+
+\declaretheoremstyle[
+  headfont=\bfseries,
+  bodyfont=\itshape,
+]{myplain}
+\declaretheoremstyle[
+  headfont=\bfseries,
+  bodyfont=\normalfont,
+]{mydefinition}
+\declaretheoremstyle[
+  headfont=\itshape,
+  bodyfont=\normalfont,
+]{myremark}
+
+\declaretheorem[
+  style=myplain,
+  name=Theorem,
+]{theorem}
+\declaretheorem[
+  style=mydefinition,
+  name=Problem,
+]{problem}
+\declaretheorem[
+  style=myremark,
+  unnumbered,
+  name=Solution,
+]{solution}
+
+\setminted[sql]{breaklines, framesep=3mm, fontsize=\footnotesize, numbersep=5pt}
+
+% Define your colors
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Define the listing style
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    lineskip=-1pt
+}
+
+
+% hyperref makes hyperlinks in the resulting PDF.
+% If your build breaks (sometimes temporarily if a hyperlink spans a page)
+% please comment out the following usepackage line and replace
+% \usepackage{mlsys2024} with \usepackage[nohyperref]{mlsys2024} above
+\usepackage{hyperref}
+
+% Attempt to make hyperref and algorithmic work together better:
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Use the following line for the initial blind version submitted for review:
+% \usepackage{mlsys2025}
+% \pagestyle{empty}
+
+
+% If accepted, instead use the following line for the camera-ready submission:
+\usepackage[accepted]{mlsys2025}
+\fancyfoot[C]{\raisebox{-20pt}{\thepage}} % to show page number at bottom center without affecting the text layout
+
+% The \mlsystitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\mlsystitlerunning{Improving GGR Algorithm}
+
+\begin{document}
+\lstset{style=mystyle}
+
+\twocolumn[
+\mlsystitle{Improving Optimality and Speed of Greedy Group Recursion Algorithm}
+
+% It is OKAY to include author information, even for blind
+% submissions: the style file will automatically remove it for you
+% unless you've provided the [accepted] option to the mlsys2024
+% package.
+
+% List of affiliations: The first argument should be a (short)
+% identifier you will use later to specify author affiliations
+% Academic affiliations should list Department, University, City, Region, Country
+% Industry affiliations should list Company, City, Region, Country
+
+% You can specify symbols, otherwise they are numbered in order.
+% Ideally, you should not use this facility. Affiliations will be numbered
+% in order of appearance and this is the preferred way.
+\mlsyssetsymbol{equal}{*}
+
+%\begin{mlsysauthorlist}
+%\mlsysauthor{Shu Liu}{equal,to}
+%\mlsysauthor{Asim Biswal}{equal,to}
+%\mlsysauthor{Luis Gaspar Schroeder}{to,goo}
+%\mlsysauthor{Ion Stoica}{to}
+%\mlsysauthor{Matei Zaharia}{to}
+%\end{mlsysauthorlist}
+\begin{mlsysauthorlist}
+\mlsysauthor{Florin Dobrian}{dag}
+\mlsysauthor{Oleg Puzyrko White}{dag}
+\end{mlsysauthorlist}
+
+%\mlsysaffiliation{to}{UC Berkeley}
+%\mlsysaffiliation{goo}{Technical University of Munich}
+%\mlsysaffiliation{ed}{Stanford University}
+\mlsysaffiliation{dag}{Data Analytics Group}
+
+\mlsyscorrespondingauthor{Oleg P. White}{oleg.p.white@gmail.com}
+% \mlsyscorrespondingauthor{Eee Pppp}{ep@eden.co.uk}
+
+% You may provide any keywords that you
+% find helpful for describing your paper; these are used to populate
+% the "keywords" metadata in the PDF but will not be shown in the document
+\mlsyskeywords{Machine Learning, MLSys}
+
+\vskip 0.3in
+
+% V2
+\begin{abstract}
+
+Recently~\cite{liu2025optimizingllmqueriesrelational} has presented efficient
+algorithm - Greedy Group Recursion (GGR) - for reordering the rows and the fields
+within each row of an input table to maximize key-value (KV) cache reuse when
+performing LLM serving.
+In this paper, we propose several adjustments to GGR algorithm that can improve
+optimality of the solution and reduce its execution time.
+
+\end{abstract}
+
+]
+
+
+
+% this must go after the closing bracket ] following \twocolumn[ ...
+
+% This command actually creates the footnote in the first column
+% listing the affiliations and the copyright notice.
+% The command takes one argument, which is text to display at the start of the footnote.
+% The \mlsysEqualContribution command is standard text for equal contribution.
+% Remove it (just {}) if you do not need this facility.
+
+\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
+%\printAffiliationsAndNotice{\mlsysEqualContribution} % otherwise use the standard text.
+
+
+\input{sections/1_introduction}
+
+\bibliography{reference}
+\bibliographystyle{mlsys2025}
+
+%% If your work has an appendix, this is the place to put it.
+% \appendix
+% \input{sections/fixed_proof}
+
+\end{document}

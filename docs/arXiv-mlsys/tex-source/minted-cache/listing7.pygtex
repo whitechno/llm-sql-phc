@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{LLM}\PYG{p}{(}
+\PYG{+w}{    }\PYG{l+s+s1}{\PYGZsq{}Given a question and four supporting contexts, answer the provided question.\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{VectorDB}\PYG{p}{.}\PYG{k}{search}\PYG{p}{(}\PYG{n}{question}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{k}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{question}\PYG{p}{)}
+\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{FEVER}
+\end{Verbatim}

@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{LLM}\PYG{p}{(}
+\PYG{+w}{    }\PYG{l+s+s1}{\PYGZsq{}Given the following information, summarize good qualities in this movie that led to a favorable rating.\PYGZsq{}}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{reviewcontent}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{movieinfo}
+\PYG{p}{)}
+\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{MOVIES}
+\end{Verbatim}

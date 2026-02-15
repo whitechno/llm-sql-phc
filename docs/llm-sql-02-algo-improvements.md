@@ -9,7 +9,7 @@ execution time.
 Algorithm improvements
 ----------------------
 
-### Recursion early termination when all distinct values have count 1
+### 1. Recursion early termination when all distinct values have count 1
 
 If table scan tells that all values in the table are distinct (each appearing in
 exactly one row), the algorithm terminates early and returns the `PHC=0` of the
@@ -37,7 +37,7 @@ up the recursion, significantly in some cases.
 Evolved prefix-aware policy" in Figure 4, page 9. However, it is an important
 type of table condition that is worth mentioning separately.
 
-### Multiple ties with max hit count: select the most informative column
+### 2. Multiple ties with max hit count: select the most informative column
 
 When scanning the table for distinct values and selecting the highest-hit
 value (lines 17–23), GGR algorithm selects the first value/column `b_v, b_c`
@@ -210,7 +210,7 @@ with `PHC = 6+5 = 11` (`PHR = 11/20 = 55%`). Again this is a remarkable
 improvement in both the output optimality (`Diff = 5%`) and execution time
 (twice fewer iterations) for a specially crafted table.
 
-### Multiple ties with max hit count: multiple most informative columns
+### 3. Multiple ties with max hit count: multiple most informative columns
 
 What if there are two or more columns with the same top count of distinct values
 with the max hit count?
@@ -272,7 +272,7 @@ b2   a3
 with `PHC = 4` (and `PHR = 4/10 = 40%`). It achieves higher PHC because it
 preserves the "double" `b2, B` in the output.
 
-### Column with K top hit counts
+### 4. Column with K top hit counts
 
 There could be a case when some column `A` has a distinct value `a1` with max
 hit count higher than for any other column. This makes `a1, A` a proper choice
@@ -292,13 +292,17 @@ especially during the first several iterations.
 Note that this adjustment does not improve the output optimality but has the
 potential to speed up the execution time.
 
-### Faster table scan with FD rules and table statistics
+### 5. Faster table scan with FD rules and table statistics
 
 At each recursive step, the GGR algorithm scans the table (lines 17–23) to find
 all distinct values with corresponding hit counts. It can result in quadratic
 complexity in terms of table size.
 
-### Ad-hoc heuristics for correlated distinct values
+We can speed up the table scan by applying two techniques: (1) combine columns
+in each functional dependency group; and (2) restrict table scan to distinct
+values with hit counts greater than the threshold (minimum `1`).
+
+### 6. Ad-hoc heuristics for correlated distinct values
 
 GGR algorithm takes full advantage of the table's Functional Dependency (FD)
 rules to reduce the search space. It has a double benefit of improving the

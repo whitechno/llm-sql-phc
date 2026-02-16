@@ -9,3 +9,61 @@ algorithm that leverages functional dependencies (such as
 primary and foreign key relationships from the data schema)
 and table statistics, which are readily available in many
 databases and analytics systems, to reduce the search space.
+
+
+\begin{algorithm}[t!]
+\caption{Greedy Group Recursion (GGR)}
+\begin{algorithmic}[1]
+\small
+\STATE \textbf{Input:} Table $T$, Functional Dependency $FD$
+\STATE \textbf{Output:} Prefix Hit Count $S$, Reordered List of Tuples $L$
+
+
+\item[]
+\FUNCTION{$\textsc{HitCount} (v, c, T, FD)$}
+    \STATE $R_v \gets \{i \mid T[i,c] = v\}$
+    \STATE $\text{inferred\_cols} \gets \{c' \mid (c, c') \in FD\}$
+    \STATE $\text{inferred\_vals} \gets \{T[R_v[0], c'] \mid c' \in \text{inferred\_cols}\}$
+    \STATE $\text{tot\_len} = \text{len}(v)^2 + \sum_{\substack{c' \in \text{inferred\_cols}}} \left( \frac{\sum_{r \in R_v} \text{len}(T[r, c'])}{|R_v|} \right)^2$
+    \STATE \textbf{return } $\text{tot\_len} \times (|R_v| - 1)$,$[c] + \text{inferred\_cols},\text{inferred\_vals}$
+\ENDFUNCTION
+
+
+\item[]
+\FUNCTION{\textsc{GGR}($T$, $FD$)}
+    % \IF{$|T|_{rows} = 1$ or $|T|_{cols} = 1$}
+    %     \STATE \textbf{return } \text{Base case processing as in \optimal}
+    % \ENDIF
+    \IF{$|T|_{rows} = 1$}
+        \STATE return 0, $[T[1]]$
+    \ENDIF
+    \IF{$|T|_{cols} = 1$}
+        \STATE $S \gets \sum_{v \in \text{distinct}(T[,1])} \textsc{HitCount}(v, 1, T)$ % groupby or sort, choose best group, append
+        \STATE {\bfseries Return} $S, sort([T[i] \mid i \in 1 \dots |T|_{rows}])$
+    \ENDIF
+
+    \STATE $max\_HC, b\_v, b\_c, b\_cols, b\_vals \gets -1, \text{None}, \text{None}, [], []$
+
+    \FOR{$c \in \text{columns}(T)$, $v \in \text{distinct}(T[,c])$}
+        \STATE $HC, cols, vals \gets \textsc{HitCount}(v, c, T, FD)$
+        \IF{$HC > max\_HC$}
+            \STATE $max\_HC, b\_v, b\_c, b\_cols, b\_vals = HC, v, c, cols, vals$
+        \ENDIF
+    \ENDFOR
+
+    \STATE $R\_v \gets \{i \mid T[i, b\_c] = b\_v\}$
+    \STATE $A\_HC, L\_A \gets \textsc{GGR}(T[\text{rows} \setminus R\_v, \text{cols}], FD)$
+    \STATE $B\_HC, L\_B \gets \textsc{GGR}(T[R\_v, \text{cols} \setminus b\_cols], FD)$
+    \STATE $C\_HC, \_ \gets \textsc{HitCount}(b\_v, b\_c, T, FD)$
+    \STATE $S \gets A\_HC + B\_HC + C\_HC$
+    \STATE $L \gets [[b\_v] + b\_vals + L\_B[i] \mid i \in 1 \dots |R\_v|] + L\_A$
+    \STATE \textbf{return } $S, L$
+\ENDFUNCTION
+
+\item[]
+\STATE \textbf{return } \textsc{GGR}($T$, $FD$)
+\end{algorithmic}
+\label{alg:greedy}
+\end{algorithm}
+
+The GGR algorithm is defined by a specification in Algorithm~\ref{alg:greedy}.

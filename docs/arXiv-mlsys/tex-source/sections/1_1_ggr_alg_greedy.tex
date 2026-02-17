@@ -12,7 +12,8 @@
     \STATE $R_v \gets \{i \mid T[i,c] = v\}$
     \STATE $\text{inferred\_cols} \gets \{c' \mid (c, c') \in FD\}$
     \STATE $\text{inferred\_vals} \gets \{T[R_v[1], c'] \mid c' \in \text{inferred\_cols}\}$
-    \STATE $\text{tot\_len} \gets \text{len}(v)^2 + \sum_{\substack{c' \in \text{inferred\_cols}}} \left( \frac{\sum_{r \in R_v} \text{len}(T[r, c'])}{|R_v|} \right)^2$
+%    \STATE $\text{tot\_len} \gets \text{len}(v)^2 + \sum_{\substack{c' \in \text{inferred\_cols}}} \left( \frac{\sum_{r \in R_v} \text{len}(T[r, c'])}{|R_v|} \right)^2$
+    \STATE $\text{tot\_len} \gets \text{len}(v)^2 + \sum_{\substack{v' \in \text{inferred\_vals}}} \text{len}(v')^2$
     \STATE $HC \gets \text{tot\_len} \times (|R_v| - 1)$
     \STATE $cols \gets [c] + \text{inferred\_cols}$
     \STATE $vals \gets [v] + \text{inferred\_vals}$
@@ -44,12 +45,12 @@
         \ENDIF
     \ENDFOR
 
-    \STATE $R\_v \gets \{i \mid T[i, b\_c] = b\_v\}$
-    \STATE $A\_HC, A\_L \gets \textsc{GGR}(T[\text{rows} \setminus R\_v, \text{cols}], FD)$
-    \STATE $B\_HC, B\_L \gets \textsc{GGR}(T[R\_v, \text{cols} \setminus b\_cols], FD)$
+    \STATE $R_v \gets \{i \mid T[i, b\_c] = b\_v\}$
+    \STATE $A\_HC, A\_L \gets \textsc{GGR}(T[\text{rows} \setminus R_v, \text{cols}], FD)$
+    \STATE $B\_HC, B\_L \gets \textsc{GGR}(T[R_v, \text{cols} \setminus b\_cols], FD)$
     \STATE $C\_HC \gets max\_HC$
     \STATE $S \gets A\_HC + B\_HC + C\_HC$
-    \STATE $L \gets [b\_vals + B\_L[i] \mid i \in 1 \dots |R\_v|] + A\_L$
+    \STATE $L \gets [b\_vals + B\_L[i] \mid i \in 1 \dots |R_v|] + A\_L$
     \STATE \textbf{return} $S, L$
 \ENDFUNCTION
 

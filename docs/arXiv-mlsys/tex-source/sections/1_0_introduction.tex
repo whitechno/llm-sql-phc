@@ -23,12 +23,15 @@ taken from the original paper but with several critical corrections
 
 GGR algorithm optimizes LLM queries by finding a ($n \times m$) table rearrangement
 that maximizes the LLM's KV cache prefix hit count (PHC).
-It achieves this goal by reordering the rows and the fields within each row to
-\textbf{maximize} the \textit{prefix hit count}.
+It achieves this goal by reordering the rows and the fields within each row.
 Each row may have a different field order.
 The rearranged table is represented as a list of tuples $L$, where each tuple
 in $L$ corresponds to a row, and the tuple elements contain the column values.
 A cell in the list of tuples is denoted as $L[r][f]$, indicating the value in tuple $r$ at position $f$.
+
+\vspace{-0.5em}
+
+\subsubsection{Prefix Hit Count Calculation}
 
 The hit count of a single cell $L[r][c]$ is non-zero \textbf{only} if its value is
 the same as in the previous row $L[r][c] = L[r-1][c]$ \textbf{and} all preceding
@@ -52,8 +55,8 @@ increases computational cost quadratically with the input length.
 
 The hit count for a single row $r$ in $L$ is then just a sum of hit counts for all
 cells in a row:
-\vspace{-1.5em}
 
+\vspace{-1.5em}
 \begin{equation}
     \textit{hit}(L, r) = \sum_{c=1}^{m} \textit{hit}(L, r, c)
     \label{eq:rowhit}
@@ -61,8 +64,8 @@ cells in a row:
 \vspace{-1.5em}
 
 The PHC for a list of tuples $L$ with $n$ rows and $m$ fields is given by:
-\vspace{-1.5em}
 
+\vspace{-1.5em}
 \begin{equation}
     \text{PHC}(L) = \sum_{r=1}^{n} \textit{hit}(L, r)
     \label{eq:phc}
@@ -72,16 +75,40 @@ The PHC for a list of tuples $L$ with $n$ rows and $m$ fields is given by:
 The $\text{PHC}(L)$ is the objective function of a table reordering algorithm: it
 tries to find output $L$ with maximum $\text{PHC}(L)$ value.
 
-The greedy part of GGR is based on finding a distinct value $b\_v$
-(in the corresponding column $b\_c$) with the highest hit count and then
-rearranging the table so that all cells with that value
-appear in consecutive rows and in the first field of the output $L$.
-GGR then uses the group of $b\_v, b\_c$ cells to split the table into two smaller
-sub-tables and recursively run GGR on each of them.
+\vspace{-0.5em}
+
+\subsubsection{Selecting the highest-hit distinct value}
+
+The greedy part of GGR is based on finding a distinct value $v$
+(in the corresponding column $c$) with the highest hit count among all distinct
+values in the table $T$.
+If $R_v = R(v, c, T)$ are the rows with value $v$ in the column $c$:
+
+\vspace{-1.5em}
+\begin{equation}
+    R(v, c, T) = \{i \mid T[i,c] = v\},
+    \label{eq:vcrows}
+\end{equation}
+\vspace{-1.5em}
+
+then hit count of $v, c$ is given by:
+
+\vspace{-1.5em}
+\begin{equation}
+    \textit{HitCount}(v, c, T) = \text{len}(v)^2 \times (|R(v, c, T)| - 1)
+    \label{eq:hitcount}
+\end{equation}
+\vspace{-1.5em}
+
+GGR then places all $v, c$ cells in consecutive rows and in the first field of the
+output $L$ and splits remaining cells of the table $T$ into the sub-table of
+rows $R_v$ with excluded column $c$: $T[R_v, \text{cols} \setminus [c]]$,
+and the sub-table of rows excluding $R_v$: $T[\text{rows} \setminus R_v, \text{cols}]$.
+GGR then recursively runs on each of two sub-tables.
 See Figure~\ref{fig:optimal} for illustration of this key step.
 
 Compared to the brute-force algorithm that
-requires $n!*(m!)^n$ potential orderings, GGR significantly reduces the search
+requires $n! \times (m!)^n$ potential orderings, GGR significantly reduces the search
 space by selecting the highest-hit value and then reducing the dimensions of the
 table at each recursive step with the maximum depth of recursion $O(\min(n,m))$.
 GGR achieves close-to-perfect PHC output with fast practical execution time.
@@ -104,8 +131,11 @@ $R_a = R_b$.
 
 FD rules can be specified as a list of disjoint sets containing column indices.
 For example, for the table with columns $A, B, C, D, E, F$ where
-$A \leftrightarrow B$ and $C \leftrightarrow D \leftrightarrow E$, the FD rules can be
-specified as $[[A, B], [C, D, E]]$.
+$A \leftrightarrow B$ and $C \leftrightarrow D \leftrightarrow E$, the FD rules can
+be written as $[[A, B], [C, D, E]]$.
+
+GGR takes advantage of FD by combining distinct values from columns in the same FD
+rule into one block of group values.
 
 \vspace{-0.5em}
 
@@ -136,3 +166,10 @@ computed for $b\_v, b\_c$ (line 34).
     \label{fig:optimal}
     \vspace{-1.5em}
 \end{figure}
+
+\vspace{-0.5em}
+
+\subsection{Reference Implementation of GGR Algorithm} \label{sec:ggr-impl}
+
+The reference implementation of GGR specification from Algorithm~\ref{alg:greedy}
+can be found in~\cite{llm-sql-phc}.

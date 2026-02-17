@@ -11,6 +11,7 @@ analytics systems, to reduce the search space.
 \input{sections/1_1_ggr_alg_greedy}
 
 \vspace{-0.5em}
+
 \subsection{Greedy Group Recursion (GGR) Algorithm} \label{sec:ggr}
 
 The GGR algorithm is described in detail in~\cite{liu2025optimizingllmqueriesrelational}.
@@ -86,7 +87,29 @@ table at each recursive step with the maximum depth of recursion $O(\min(n,m))$.
 GGR achieves close-to-perfect PHC output with fast practical execution time.
 
 \vspace{-0.5em}
+
 \subsubsection{Functional Dependencies}
+
+GGR algorithm leverages a table's functional dependencies (FD) to reduce the number
+of fields it needs to consider at each recursion step.
+
+We say that two columns $A$ and $B$ are in functional dependency $A \leftrightarrow B$
+in a table $T$ if, for any two rows $r_1$ and $r_2$, $T[r_1][A] = T[r_2][A]$ implies
+$T[r_1][B] = T[r_2][B]$ and vice versa.
+
+In other words, for any distinct value $a$ in the column $A$, there is a distinct
+value $b$ in the column $B$ such that they both are on the same rows.
+I.e., for $R_a \gets \{i \mid T[i,A] = a\}$ and $R_b \gets \{i \mid T[i,B] = b\}$ we have
+$R_a = R_b$.
+
+FD rules can be specified as a list of disjoint sets containing column indices.
+For example, for the table with columns $A, B, C, D, E, F$ where
+$A \leftrightarrow B$ and $C \leftrightarrow D \leftrightarrow E$, the FD rules can be
+specified as $[[A, B], [C, D, E]]$.
+
+\vspace{-0.5em}
+
+\subsubsection{GGR Specification}
 
 We can follow the pseudocode specification of GGR in Algorithm~\ref{alg:greedy} listing.
 

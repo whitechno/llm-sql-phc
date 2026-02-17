@@ -10,6 +10,9 @@ analytics systems, to reduce the search space.
 
 \input{sections/1_1_ggr_alg_greedy}
 
+\vspace{-0.5em}
+\subsection{Greedy Group Recursion (GGR) Algorithm} \label{sec:ggr}
+
 The GGR algorithm is described in detail in~\cite{liu2025optimizingllmqueriesrelational}.
 Let us briefly outline its main points.
 
@@ -17,12 +20,12 @@ The pseudocode specification of GGR is in Algorithm~\ref{alg:greedy} listing and
 taken from the original paper but with several critical corrections
 (and multiple little typo fixes).
 
-GGR algorithm optimizes LLM queries by finding a ($n \times m$) table re-arrangement
+GGR algorithm optimizes LLM queries by finding a ($n \times m$) table rearrangement
 that maximizes the LLM's KV cache prefix hit count (PHC).
 It achieves this goal by reordering the rows and the fields within each row to
 \textbf{maximize} the \textit{prefix hit count}.
 Each row may have a different field order.
-The re-arranged table is represented as a list of tuples $L$, where each tuple
+The rearranged table is represented as a list of tuples $L$, where each tuple
 in $L$ corresponds to a row, and the tuple elements contain the column values.
 A cell in the list of tuples is denoted as $L[r][f]$, indicating the value in tuple $r$ at position $f$.
 
@@ -30,8 +33,8 @@ The hit count of a single cell $L[r][c]$ is non-zero \textbf{only} if its value 
 the same as in the previous row $L[r][c] = L[r-1][c]$ \textbf{and} all preceding
 fields have the same property $\forall f \leq c, L[r][f] = L[r-1][f]$.
 Then its hit count is computed as the square of the value's string length:
-\vspace{-2em}
 
+\vspace{-1.5em}
 \begin{equation}
     \textit{hit}(L, r, c) =
     \begin{cases}
@@ -65,6 +68,16 @@ The PHC for a list of tuples $L$ with $n$ rows and $m$ fields is given by:
 \end{equation}
 \vspace{-1.5em}
 
+The $\text{PHC}(L)$ is the objective function of a table reordering algorithm: it
+tries to find output $L$ with maximum $\text{PHC}(L)$ value.
+
+The greedy part of GGR is based on finding a distinct value $b\_v$
+(in the corresponding column $b\_c$) with the highest hit count and then
+rearranging the table so that all cells with that value
+appear in consecutive rows and in the first field of the output $L$.
+GGR then uses the group of $b\_v, b\_c$ cells to split the table into two smaller
+sub-tables and recursively run GGR on each of them.
+
 Compared to the brute-force algorithm that
 requires $n!*(m!)^n$ potential orderings, GGR significantly reduces the search
 space by selecting the highest-hit value and then reducing the dimensions of the
@@ -95,5 +108,5 @@ computed for $b\_v, b\_c$ (line 34).
         the sub-table $T$ excluding rows $R_v$ (green box),
         and the sub-table of rows $R_v$ excluding the field where the value is located in (blue box).}
     \label{fig:optimal}
-    \vspace{-2em}
+    \vspace{-1.5em}
 \end{figure}

@@ -90,3 +90,7 @@ Then line 27 should be changed to
 ```text
 C_HC, _, b_vals <- HitCount(b_v, b_c, T, FD)
 ```
+
+Figures
+-------
+![GGR algorithm](/docs/arXiv-mlsys/tex-source/figures/claude-figures/max_hit_recursion.svg)

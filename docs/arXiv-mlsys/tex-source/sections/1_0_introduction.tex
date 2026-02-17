@@ -77,12 +77,16 @@ rearranging the table so that all cells with that value
 appear in consecutive rows and in the first field of the output $L$.
 GGR then uses the group of $b\_v, b\_c$ cells to split the table into two smaller
 sub-tables and recursively run GGR on each of them.
+See Figure~\ref{fig:optimal} for illustration of this key step.
 
 Compared to the brute-force algorithm that
 requires $n!*(m!)^n$ potential orderings, GGR significantly reduces the search
 space by selecting the highest-hit value and then reducing the dimensions of the
 table at each recursive step with the maximum depth of recursion $O(\min(n,m))$.
 GGR achieves close-to-perfect PHC output with fast practical execution time.
+
+\vspace{-0.5em}
+\subsubsection{Functional Dependencies}
 
 We can follow the pseudocode specification of GGR in Algorithm~\ref{alg:greedy} listing.
 
@@ -94,7 +98,6 @@ but excluding the column $b\_c$ and its FD-associated columns
 (line 31: $T[R\_v, \text{cols} \setminus b\_cols]$),
 and another sub-table with the remaining rows
 (line 32: $T[\text{rows} \setminus R\_v, \text{cols}]$).
-See Figure~\ref{fig:optimal} for illustration of this key step.
 In the final step, GGR recurses on the two sub-tables (lines 31–32) and calculates
 the total PHC as the sum of PHCs computed for each sub-table and of hit count
 computed for $b\_v, b\_c$ (line 34).

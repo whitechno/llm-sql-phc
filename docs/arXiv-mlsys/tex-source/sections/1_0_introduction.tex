@@ -1,7 +1,7 @@
 \section{Introduction}
 
-There has been growing research on LLM inference optimization.
-In particular, recent work~\cite{liu2025optimizingllmqueriesrelational, cheng2025letbarbariansinai}
+There has been growing research on LLM inference optimization. In particular, recent
+work~\cite{liu2025optimizingllmqueriesrelational, cheng2025letbarbariansinai}
 presents solutions to optimize relational data analytics workloads for offline LLM inference.
 It proposes Greedy Group Recursion (GGR), an approximate algorithm that leverages
 functional dependencies (such as primary and foreign key relationships from the data
@@ -11,7 +11,89 @@ analytics systems, to reduce the search space.
 \input{sections/1_1_ggr_alg_greedy}
 
 The GGR algorithm is described in detail in~\cite{liu2025optimizingllmqueriesrelational}.
-Let us recup briefly its main points.
+Let us briefly outline its main points.
 
-The pseudocode specification of GGR is in Algorithm~\ref{alg:greedy}
-and is taken from the original paper but with several critical corrections (and multiple little typo fixes).
+The pseudocode specification of GGR is in Algorithm~\ref{alg:greedy} listing and is
+taken from the original paper but with several critical corrections
+(and multiple little typo fixes).
+
+GGR algorithm optimizes LLM queries by finding a ($n \times m$) table re-arrangement
+that maximizes the LLM's KV cache prefix hit count (PHC).
+It achieves this goal by reordering the rows and the fields within each row to
+\textbf{maximize} the \textit{prefix hit count}.
+Each row may have a different field order.
+The re-arranged table is represented as a list of tuples $L$, where each tuple
+in $L$ corresponds to a row, and the tuple elements contain the column values.
+A cell in the list of tuples is denoted as $L[r][f]$, indicating the value in tuple $r$ at position $f$.
+
+The hit count of a single cell $L[r][c]$ is non-zero \textbf{only} if its value is
+the same as in the previous row $L[r][c] = L[r-1][c]$ \textbf{and} all preceding
+fields have the same property $\forall f \leq c, L[r][f] = L[r-1][f]$.
+Then its hit count is computed as the square of the value's string length:
+\vspace{-2em}
+
+\begin{equation}
+    \textit{hit}(L, r, c) =
+    \begin{cases}
+        \text{len}(L[r][c])^2 & \text{if } \forall f \leq c, \\ & L[r][f]= \\ & L[r-1][f] \\
+        0 & \text{otherwise}
+    \end{cases}
+    \label{eq:cellhit}
+\end{equation}
+\vspace{-1.5em}
+
+The squared string length reflects the quadratic complexity of token processing in
+LLM inference, where each token computation depends on every preceding token and
+increases computational cost quadratically with the input length.
+
+The hit count for a single row $r$ in $L$ is then just a sum of hit counts for all
+cells in a row:
+\vspace{-1.5em}
+
+\begin{equation}
+    \textit{hit}(L, r) = \sum_{c=1}^{m} \textit{hit}(L, r, c)
+    \label{eq:rowhit}
+\end{equation}
+\vspace{-1.5em}
+
+The PHC for a list of tuples $L$ with $n$ rows and $m$ fields is given by:
+\vspace{-1.5em}
+
+\begin{equation}
+    \text{PHC}(L) = \sum_{r=1}^{n} \textit{hit}(L, r)
+    \label{eq:phc}
+\end{equation}
+\vspace{-1.5em}
+
+Compared to the brute-force algorithm that
+requires $n!*(m!)^n$ potential orderings, GGR significantly reduces the search
+space by selecting the highest-hit value and then reducing the dimensions of the
+table at each recursive step with the maximum depth of recursion $O(\min(n,m))$.
+GGR achieves close-to-perfect PHC output with fast practical execution time.
+
+We can follow the pseudocode specification of GGR in Algorithm~\ref{alg:greedy} listing.
+
+At each recursive step, the GGR algorithm scans the table (lines 21–29) to find
+all distinct values with corresponding hit counts (lines 3–12).
+It then selects the highest-hit value $b\_v$ (in the column $b\_c$) and splits the
+table into two sub-tables - one with all the rows $R\_v$ containing $b\_v$ value
+but excluding the column $b\_c$ and its FD-associated columns
+(line 31: $T[R\_v, \text{cols} \setminus b\_cols]$),
+and another sub-table with the remaining rows
+(line 32: $T[\text{rows} \setminus R\_v, \text{cols}]$).
+See Figure~\ref{fig:optimal} for illustration of this key step.
+In the final step, GGR recurses on the two sub-tables (lines 31–32) and calculates
+the total PHC as the sum of PHCs computed for each sub-table and of hit count
+computed for $b\_v, b\_c$ (line 34).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.49\textwidth]{figures/MLSys_Figures/prefix_hit_maximization}
+    \vspace{-1.5em}
+    \caption{GGR picks the group with the maximum hit count at each step and calculates PHC
+    as the sum of PHC of the elected group values (yellow box),
+        the sub-table $T$ excluding rows $R_v$ (green box),
+        and the sub-table of rows $R_v$ excluding the field where the value is located in (blue box).}
+    \label{fig:optimal}
+    \vspace{-2em}
+\end{figure}

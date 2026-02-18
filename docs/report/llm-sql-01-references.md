@@ -93,4 +93,13 @@ C_HC, _, b_vals <- HitCount(b_v, b_c, T, FD)
 
 Figures
 -------
+The figure below shows the GGR algorithm recursion tree for a table with 3 top
+hit count distinct values `v, b, a`:
 ![GGR algorithm](/docs/arXiv-mlsys/tex-source/figures/claude-figures/max_hit_recursion.svg)
+
+The figure below shows the GGR algorithm recursion tree for a table similar to
+the one above, but with additional column `c'` that is in FD rule with column
+`c`:
+![GGR algorithm with FD](/docs/arXiv-mlsys/tex-source/figures/claude-figures/max_hit_recursion_vprime.svg)
+
+

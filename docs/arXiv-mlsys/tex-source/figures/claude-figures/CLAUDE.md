@@ -1,5 +1,10 @@
 # Figure Descriptions
 
+Note: use this command to convert SVG to PDF:
+```text
+rsvg-convert -f pdf -o max_hit_recursion.pdf max_hit_recursion.svg
+```
+
 ## max_hit_recursion.svg
 
 The figure illustrates a key step of the Greedy Group Recursion algorithm
@@ -41,9 +46,10 @@ gap between Top and Bottom groups in the Right section, which is 40px.
 
 ## max_hit_recursion_vprime.svg
 
-The figure extends max_hit_recursion.svg by adding a second distinct value column
-v' (grouped with v in the yellow area). All gaps between adjacent areas are 10px,
-except the gap between Top and Bottom groups in the Right section, which is 40px.
+The figure extends max_hit_recursion.svg by adding a second distinct value
+column `v'` (grouped with `v` in the yellow area). All gaps between adjacent
+areas are 10px, except the gap between Top and Bottom groups in the Right
+section, which is 40px.
 
 ```
   1. Legend (two entries, left to right):

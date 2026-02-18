@@ -136,7 +136,7 @@ be written as $[[A, B], [C, D, E]]$.
 
 GGR takes advantage of FD by combining distinct values from columns in the same FD
 rule into one block of value groups.
-See Figure~\ref{fig:optimalfd} for illustration of GGR iteration in the presence of FD rule.
+See Figure~\ref{fig:optimal-fd} for illustration of GGR iteration in the presence of FD rule.
 
 \begin{figure}
     \centering
@@ -161,17 +161,26 @@ See Figure~\ref{fig:optimalfd} for illustration of GGR iteration in the presence
 
 We can follow the pseudocode specification of GGR in Algorithm~\ref{alg:greedy} listing.
 
-At each recursive step, the GGR algorithm scans the table (lines 21–29) to find
-all distinct values with corresponding hit counts (lines 3–12).
+At each recursive step, the GGR algorithm scans the table (lines 21--29) to find
+all distinct values with corresponding hit counts (lines 3--12).
 It then selects the highest-hit value $b\_v$ (in the column $b\_c$) and splits the
 table into two sub-tables - one with all the rows $R\_v$ containing $b\_v$ value
 but excluding the column $b\_c$ and its FD-associated columns
 (line 31: $T[R\_v, \text{cols} \setminus b\_cols]$),
 and another sub-table with the remaining rows
 (line 32: $T[\text{rows} \setminus R\_v, \text{cols}]$).
-In the final step, GGR recurses on the two sub-tables (lines 31–32) and calculates
+In the final step, GGR recurses on the two sub-tables (lines 31--32) and calculates
 the total PHC as the sum of PHCs computed for each sub-table and of hit count
 computed for $b\_v, b\_c$ (line 34).
+
+There are two recursion termination conditions:
+\vspace{-0.5em}
+\begin{itemize}
+    \item When a table contains only a single row. Then PHC is zero and the table is
+    not rearranged. (Lines 14--16.)
+    \item When a table contains only a single column. Then the table with sorted
+    column values is returned and PHC is trivially computed. (Lines 17--20.)
+\end{itemize}
 
 \begin{figure}
     \centering
@@ -184,9 +193,34 @@ computed for $b\_v, b\_c$ (line 34).
         $HitCount(v) + HitCount(v') > HitCount(b) > HitCount(a)$
         and all other distinct values have hit count zero.
     }
-    \label{fig:optimalfd}
+    \label{fig:optimal-fd}
     \vspace{-1.5em}
 \end{figure}
+
+\vspace{-0.5em}
+
+\subsubsection{Optimality of GGR Algorithm}
+
+While GGR approximates the ideal optimal rearrangement of rows and columns, it can
+achieve \textit{proven} optimal PHC in certain cases.
+
+The first case is a trivial one -- when hit counts of all distinct values
+(with FD accounted for) are zero.
+It means that every distinct value in the table appears in a single row only.
+In this case non-zero PHC cannot be achieved by any table rearrangement.
+This case also covers one of the recursion termination conditions -- a table with a single row.
+
+The second case is when all columns of a table are bound by an FD rule.
+In other words, any column functionally determines all other columns.
+In this case for each distinct value GGR combines all columns to one group of values,
+capturing all key correlations and producing the optimal reordering.
+This case also covers the recursion termination conditions -- a table with a single column.
+
+However, there are cases when GGR clearly produces suboptimal solutions.
+
+Case when distinct values tie in max hit count.
+
+Case when a distinct value in one column correlates with a distinct value in another column.
 
 \vspace{-0.5em}
 

@@ -1,0 +1,62 @@
+% @formatter:off
+\begin{algorithm}[t!]
+\caption{Adjusted Greedy Group Recursion (AGGR)}
+\begin{algorithmic}[1]
+\small
+\STATE \textbf{Input:} Table $T$, Functional Dependency $FD$
+\STATE \textbf{Output:} Prefix Hit Count $HC$, Reordered List of Tuples $L$
+
+
+\item[]
+\FUNCTION{$\textsc{HitCount} (v, c, T, FD)$}
+    \STATE $R_v \gets \{i \mid T[i,c] = v\}$
+    \STATE $inferred\_cols \gets \{c' \mid (c, c') \in FD\}$
+    \STATE $inferred\_vals \gets \{T[R_v[1], c'] \mid c' \in inferred\_cols\}$
+%    \STATE $\text{tot\_len} \gets \text{len}(v)^2 + \sum_{\substack{c' \in \text{inferred\_cols}}} \left( \frac{\sum_{r \in R_v} \text{len}(T[r, c'])}{|R_v|} \right)^2$
+    \STATE $tot\_len \gets \text{len}(v)^2 + \sum_{\substack{v' \in inferred\_vals}} \text{len}(v')^2$
+    \STATE $HC \gets tot\_len \times (|R_v| - 1)$
+    \STATE $cols \gets [c] + inferred\_cols$
+    \STATE $vals \gets [v] + inferred\_vals$
+    \STATE \textbf{return} $HC, cols, vals$
+\ENDFUNCTION
+
+
+\item[]
+\FUNCTION{\textsc{GGR}($T$, $FD$)}
+    % \IF{$|T|_{rows} = 1$ or $|T|_{cols} = 1$}
+    %     \STATE \textbf{return } \text{Base case processing as in \optimal}
+    % \ENDIF
+    \IF{$|T|_{rows} = 1$}
+        \STATE {\bfseries return} $0, [T[1]]$
+    \ENDIF
+    \IF{$|T|_{cols} = 1$}
+        \STATE $S \gets \sum_{v \in \text{distinct}(T[,1])} \textsc{HitCount}(v, 1, T)$ % groupby or sort, choose best group, append
+        \STATE {\bfseries return} $S, sort([T[i] \mid i \in 1 \dots |T|_{rows}])$
+    \ENDIF
+
+    \STATE $b\_v, b\_c \gets \text{None}, \text{None}$
+    \STATE $max\_HC, b\_cols, b\_vals \gets -1, [], []$
+
+    \FOR{$c \in \text{columns}(T)$, $v \in \text{distinct}(T[,c])$}
+        \STATE $HC, cols, vals \gets \textsc{HitCount}(v, c, T, FD)$
+        \IF{$HC > max\_HC$}
+            \STATE $b\_v, b\_c \gets v, c$
+            \STATE $max\_HC, b\_cols, b\_vals \gets HC, cols, vals$
+        \ENDIF
+    \ENDFOR
+
+    \STATE $R_v \gets \{i \mid T[i, b\_c] = b\_v\}$
+    \STATE $HC_A, L_A \gets \textsc{GGR}(T[\text{rows} \setminus R_v, \text{cols}], FD)$
+    \STATE $HC_B, L_B \gets \textsc{GGR}(T[R_v, \text{cols} \setminus b\_cols], FD)$
+    \STATE $HC_C \gets max\_HC$
+    \STATE $HC \gets HC_A + HC_B + HC_C$
+    \STATE $L \gets [b\_vals + L_B[i] \mid i \in 1 \dots |R_v|] + L_A$
+    \STATE \textbf{return} $HC, L$
+\ENDFUNCTION
+
+\item[]
+\STATE \textbf{return} \textsc{GGR}($T$, $FD$)
+\end{algorithmic}
+\label{alg:greedy-adj}
+\end{algorithm}
+% @formatter:on

@@ -121,8 +121,8 @@ GGR algorithm leverages a table's functional dependencies (FD) to reduce the num
 of fields it needs to consider at each recursion step.
 
 We say that two columns $A$ and $B$ are in functional dependency $A \leftrightarrow B$
-in a table $T$ if, for any two rows $r_1$ and $r_2$, $T[r_1][A] = T[r_2][A]$ implies
-$T[r_1][B] = T[r_2][B]$ and vice versa.
+in a table $T$ if, for any two rows $r_1$ and $r_2$, $T[r_1, A] = T[r_2, A]$ implies
+$T[r_1, B] = T[r_2, B]$ and vice versa.
 
 In other words, for any distinct value $a$ in the column $A$, there is a distinct
 value $b$ in the column $B$ such that they both are on the same rows.
@@ -135,7 +135,25 @@ $A \leftrightarrow B$ and $C \leftrightarrow D \leftrightarrow E$, the FD rules 
 be written as $[[A, B], [C, D, E]]$.
 
 GGR takes advantage of FD by combining distinct values from columns in the same FD
-rule into one block of group values.
+rule into one block of value groups.
+See Figure~\ref{fig:optimalfd} for illustration of GGR iteration in the presence of FD rule.
+
+\begin{figure}
+    \centering
+%    \includegraphics[width=0.49\textwidth]{figures/MLSys_Figures/prefix_hit_maximization}
+    \includegraphics[width=0.49\textwidth]{figures/claude-figures/max_hit_recursion}
+    \vspace{-1.5em}
+    \caption{
+        GGR picks the group with the maximum hit count at each step and calculates PHC
+        as the sum of PHC of the elected group values (yellow box),
+        the sub-table $T$ excluding rows $R_v$ (green box),
+        and the sub-table of rows $R_v$ excluding the field where the value is located in (blue box).
+        In the input table $T$ (white box on the left), $HitCount(v) > HitCount(b) > HitCount(a)$
+        and all other distinct values have hit count zero.
+    }
+    \label{fig:optimal}
+    \vspace{-1.5em}
+\end{figure}
 
 \vspace{-0.5em}
 
@@ -157,22 +175,15 @@ computed for $b\_v, b\_c$ (line 34).
 
 \begin{figure}
     \centering
-%    \includegraphics[width=0.49\textwidth]{figures/MLSys_Figures/prefix_hit_maximization}
-    \includegraphics[width=0.49\textwidth]{figures/claude-figures/max_hit_recursion}
-    \vspace{-1.5em}
-    \caption{GGR picks the group with the maximum hit count at each step and calculates PHC
-    as the sum of PHC of the elected group values (yellow box),
-        the sub-table $T$ excluding rows $R_v$ (green box),
-        and the sub-table of rows $R_v$ excluding the field where the value is located in (blue box).}
-    \label{fig:optimal}
-    \vspace{-1.5em}
-\end{figure}
-
-\begin{figure}
-    \centering
     \includegraphics[width=0.49\textwidth]{figures/claude-figures/max_hit_recursion_vprime}
     \vspace{-1.5em}
-    \caption{Similar to Figure~\ref{fig:optimal} but with two distinct values $v$ and $v'$ in columns bound by FD rule.}
+    \caption{
+        Similar to Figure~\ref{fig:optimal} but with two distinct values $v$ (in column $c$)
+        and $v'$ (in column $c'$) bound by FD rule $FD = [c, c']$.
+        In the input table $T$ (white box on the left),
+        $HitCount(v) + HitCount(v') > HitCount(b) > HitCount(a)$
+        and all other distinct values have hit count zero.
+    }
     \label{fig:optimalfd}
     \vspace{-1.5em}
 \end{figure}

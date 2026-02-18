@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 260"
+     font-family="Arial, Helvetica, sans-serif" font-size="22">
+
+  <!-- ==================== LEGEND ==================== -->
+  <text x="30" y="25" font-size="25" font-weight="bold" fill="#222">GGR suboptimal example 1</text>
+
+  <!-- ==================== LEFT TABLE ==================== -->
+  <!-- Single table: 4 rows, 2 columns -->
+  <g stroke="#333" stroke-width="2" fill="none">
+    <rect x="30" y="40" width="140" height="176"/>
+    <!-- Horizontal row dividers -->
+    <line x1="30" y1="84"  x2="170" y2="84"/>
+    <line x1="30" y1="128" x2="170" y2="128"/>
+    <line x1="30" y1="172" x2="170" y2="172"/>
+    <!-- Vertical column divider (2 columns) -->
+    <line x1="100" y1="40" x2="100" y2="216"/>
+  </g>
+  <!-- Row 0: "b1" in column 2 -->
+  <text x="135" y="68"  text-anchor="middle" fill="#333">b1</text>
+  <!-- Row 1: "a" in column 1, "b1" in column 2 -->
+  <text x="65"  y="112" text-anchor="middle" fill="#333">a</text>
+  <text x="135" y="112" text-anchor="middle" fill="#333">b1</text>
+  <!-- Row 2: "a" in column 1, "b2" in column 2 -->
+  <text x="65"  y="156" text-anchor="middle" fill="#333">a</text>
+  <text x="135" y="156" text-anchor="middle" fill="#333">b2</text>
+  <!-- Row 3: "b2" in column 2 -->
+  <text x="135" y="200" text-anchor="middle" fill="#333">b2</text>
+
+  <!-- ==================== ARROW 1 ==================== -->
+  <!-- Centered vertically at table center y=128 -->
+  <polygon points="185,121 215,121 215,113 236,128 215,143 215,135 185,135"
+           fill="#B8B8B8"/>
+
+  <!-- ==================== MIDDLE SECTION ==================== -->
+
+  <!-- Top Group: Yellow column (a,a) + Blue area (b1,b1), 10px gap from bottom group -->
+
+  <!-- Yellow rect (a values) — solid border -->
+  <rect x="246" y="40" width="75" height="88" rx="2"
+        fill="#FEF3CD" stroke="#DAA520" stroke-width="2"/>
+  <text x="283" y="68"  text-anchor="middle" fill="#333">a</text>
+  <text x="283" y="112" text-anchor="middle" fill="#333">a</text>
+
+  <!-- Blue rect (1 column × 2 rows) — solid border, 10px gap from yellow -->
+  <rect x="331" y="40" width="75" height="88" rx="2"
+        fill="#CCE0F5" stroke="#4A86C8" stroke-width="2"/>
+  <!-- Internal dashed horizontal line -->
+  <line x1="331" y1="84" x2="406" y2="84"
+        stroke="#4A86C8" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <!-- b1, b2 values in column 1 (the only column) -->
+  <text x="368" y="68"  text-anchor="middle" fill="#333">b1</text>
+  <text x="368" y="112" text-anchor="middle" fill="#333">b2</text>
+
+  <!-- Bottom Group: Green solid-border area (2 columns × 2 rows), 10px gap -->
+  <rect x="246" y="138" width="160" height="88" rx="2"
+        fill="#D5ECC5" stroke="#6B9F4A" stroke-width="2"/>
+  <!-- Internal dashed horizontal line -->
+  <line x1="246" y1="182" x2="406" y2="182"
+        stroke="#6B9F4A" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <!-- Internal dashed vertical line -->
+  <line x1="321" y1="138" x2="321" y2="226"
+        stroke="#6B9F4A" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <!-- b1, b2 values in column 2 (right) -->
+  <text x="364" y="166" text-anchor="middle" fill="#333">b1</text>
+  <text x="364" y="210" text-anchor="middle" fill="#333">b2</text>
+
+</svg>

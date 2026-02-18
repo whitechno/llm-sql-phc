@@ -84,3 +84,57 @@ section, which is 40px.
        - Yellow solid-border column (a,a) — 2 rows
        - Blue solid-border area (3 columns × 2 rows, internal dashed grid) — to the right
 ```
+
+## subopt-example-1-ties.svg
+
+```
+  1. Legend: "GGR suboptimal example 1" label
+  
+  2. Left table — single black-bordered grid (4 rows, 2 columns):
+     - Row 0: "b1" in column 2
+     - Row 1: "a" in column 1, "b1" in column 2
+     - Row 2: "a" in column 1, "b2" in column 2
+     - Row 3: "b2" in column 2
+
+  3. Arrow 1 — gray block arrow pointing right
+
+  4. Middle section — split into two groups (10px gap between them):
+     - Top group:
+       - Yellow solid-border column (a,a) — 2 rows
+       - Blue solid-border area (1 column × 2 rows, internal dashed grid) —
+         "b1,b2" in column 1
+     - Bottom group:
+       - Green solid-border area (2 columns × 2 rows, internal dashed grid) —
+         "b1,b2" in column 2
+```
+
+```bash
+rsvg-convert -f pdf -o subopt-example-1-ties.pdf subopt-example-1-ties.svg
+```
+
+## subopt-example-2-corrs.svg
+
+```
+  1. Legend: "GGR suboptimal example 2" label
+  
+  2. Left table — single black-bordered grid (4 rows, 3 columns):
+     - Row 0: "a" in column 1
+     - Row 1: "a" in column 1
+     - Row 2: "a" in column 1, "b" in column 2, "c" in column 3
+     - Row 3: "b" in column 2, "c" in column 3
+
+  3. Arrow 1 — gray block arrow pointing right
+
+  4. Middle section — split into two groups (10px gap between them):
+     - Top group:
+       - Yellow solid-border column (a,a,a) — 3 rows
+       - Blue solid-border area (2 columns × 3 rows, internal dashed grid) —
+         "b,c" in row 2 (third row)
+     - Bottom group:
+       - Green solid-border area (3 columns × 1 row, internal dashed grid) —
+         "b" in column 2, "c" in column 3
+```
+
+```bash
+rsvg-convert -f pdf -o subopt-example-2-corrs.pdf subopt-example-2-corrs.svg
+```

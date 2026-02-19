@@ -35,12 +35,28 @@ We can exploit cases like this by splitting the table into $K+1$ sub-tables in
 one iteration rather than going through $K$ separate iterations.
 It also accelerates the reduction of sub-table size benefitting the table scan in
 subsequent recursions.
+See Figure~\ref{fig:2-01-aggr-k-top} for a description of this adjustment.
 
 We can characterize this approach as an extension of the ``greedy'' strategy to
 selecting multiple distinct values in one column in one iteration.
 
 Note that this adjustment does not improve the output optimality but reduces the
 number of iterations, in some cases significantly.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.49\textwidth]{figures/claude-figures/2-01-aggr-k-top}
+    \vspace{-1.5em}
+    \caption{
+        If a column $V$ contains $K$ distinct values $v1, v2, \dots, vK$ with the highest
+        hit counts in the table, Adjusted GGR picks all $K$ top hit count groups in
+        one recursion step and splits the table into $K+1$ sub-tables: one sub-table
+        $T$ excluding rows $\sum_{i=1}^{K} R_{vi}$ (green box), and $K$ sub-tables
+        of rows $R_{vi}$ for $i \in 1 \dots K$ excluding the column $V$ (blue boxes).
+    }
+    \label{fig:2-01-aggr-k-top}
+    \vspace{-1.5em}
+\end{figure}
 
 \vspace{-0.5em}
 

@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 445"
+     font-family="Arial, Helvetica, sans-serif" font-size="22">
+
+  <!-- ==================== LEGEND ==================== -->
+  <!-- Entry 1: gray block arrow + "AGGR Recursion Step" -->
+  <polygon points="30,12 48,12 48,7 60,18 48,29 48,24 30,24"
+           fill="#B8B8B8"/>
+  <text x="72" y="26" font-size="25" font-weight="bold" fill="#222">AGGR Recursion Step</text>
+
+  <!-- Entry 2: yellow square + "Top Hit Count Value Groups" -->
+  <rect x="30" y="40" width="30" height="30" rx="2"
+        fill="#FEF3CD" stroke="#DAA520" stroke-width="2"/>
+  <text x="72" y="64" font-size="25" font-weight="bold" fill="#222">Top Hit Count Value Groups</text>
+
+  <!-- ==================== LEFT TABLE ==================== -->
+  <!-- Single table: 7 rows, 2 columns -->
+  <g stroke="#333" stroke-width="2" fill="none">
+    <rect x="30" y="90" width="140" height="294"/>
+    <!-- Horizontal row dividers -->
+    <line x1="30" y1="132" x2="170" y2="132"/>
+    <line x1="30" y1="174" x2="170" y2="174"/>
+    <line x1="30" y1="216" x2="170" y2="216"/>
+    <line x1="30" y1="258" x2="170" y2="258"/>
+    <line x1="30" y1="300" x2="170" y2="300"/>
+    <line x1="30" y1="342" x2="170" y2="342"/>
+    <!-- Vertical column divider (2 columns) -->
+    <line x1="100" y1="90" x2="100" y2="384"/>
+  </g>
+  <!-- Rows 0-1: "v1" in column 2 -->
+  <text x="135" y="118" text-anchor="middle" fill="#333">v1</text>
+  <text x="135" y="160" text-anchor="middle" fill="#333">v1</text>
+  <!-- Rows 2-3: "v2" in column 2 -->
+  <text x="135" y="202" text-anchor="middle" fill="#333">v2</text>
+  <text x="135" y="244" text-anchor="middle" fill="#333">v2</text>
+  <!-- Rows 4-5: "v3" in column 2 -->
+  <text x="135" y="286" text-anchor="middle" fill="#333">v3</text>
+  <text x="135" y="328" text-anchor="middle" fill="#333">v3</text>
+  <!-- Row 6: empty -->
+
+  <!-- ==================== ARROW 1 ==================== -->
+  <!-- Centered vertically at table center y=237 -->
+  <polygon points="185,230 215,230 215,222 236,237 215,252 215,244 185,244"
+           fill="#B8B8B8"/>
+
+  <!-- ==================== MIDDLE SECTION ==================== -->
+  <!-- 4 groups, 10px gaps between them -->
+
+  <!-- Top Group: Yellow (v1,v1) + Blue (1 col × 2 rows, empty) -->
+  <rect x="246" y="90" width="75" height="84" rx="2"
+        fill="#FEF3CD" stroke="#DAA520" stroke-width="2"/>
+  <text x="284" y="118" text-anchor="middle" fill="#333">v1</text>
+  <text x="284" y="160" text-anchor="middle" fill="#333">v1</text>
+
+  <rect x="331" y="90" width="75" height="84" rx="2"
+        fill="#CCE0F5" stroke="#4A86C8" stroke-width="2"/>
+  <line x1="331" y1="132" x2="406" y2="132"
+        stroke="#4A86C8" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- Second Group: Yellow (v2,v2) + Blue (1 col × 2 rows, empty) -->
+  <rect x="246" y="184" width="75" height="84" rx="2"
+        fill="#FEF3CD" stroke="#DAA520" stroke-width="2"/>
+  <text x="284" y="212" text-anchor="middle" fill="#333">v2</text>
+  <text x="284" y="254" text-anchor="middle" fill="#333">v2</text>
+
+  <rect x="331" y="184" width="75" height="84" rx="2"
+        fill="#CCE0F5" stroke="#4A86C8" stroke-width="2"/>
+  <line x1="331" y1="226" x2="406" y2="226"
+        stroke="#4A86C8" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- Third Group: Yellow (v3,v3) + Blue (1 col × 2 rows, empty) -->
+  <rect x="246" y="278" width="75" height="84" rx="2"
+        fill="#FEF3CD" stroke="#DAA520" stroke-width="2"/>
+  <text x="284" y="306" text-anchor="middle" fill="#333">v3</text>
+  <text x="284" y="348" text-anchor="middle" fill="#333">v3</text>
+
+  <rect x="331" y="278" width="75" height="84" rx="2"
+        fill="#CCE0F5" stroke="#4A86C8" stroke-width="2"/>
+  <line x1="331" y1="320" x2="406" y2="320"
+        stroke="#4A86C8" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- Bottom Group: Green (2 columns × 1 row, empty) -->
+  <rect x="246" y="372" width="160" height="42" rx="2"
+        fill="#D5ECC5" stroke="#6B9F4A" stroke-width="2"/>
+  <line x1="321" y1="372" x2="321" y2="414"
+        stroke="#6B9F4A" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+</svg>

@@ -138,3 +138,39 @@ rsvg-convert -f pdf -o subopt-example-1-ties.pdf subopt-example-1-ties.svg
 ```bash
 rsvg-convert -f pdf -o subopt-example-2-corrs.pdf subopt-example-2-corrs.svg
 ```
+
+## 2-01-aggr-k-top.svg
+
+The figure illustrates a recursion step of the Adjusted Greedy Group Recursion
+algorithm for the case when column `V` has 3 top hit count distinct values.
+
+```
+  1. Legend (two entries, left to right):
+     - Gray block arrow with "AGGR Recursion Step" label
+     - Solid-border yellow square with "Top Hit Count Value Groups" label
+
+  2. Left table — single black-bordered grid (7 rows, 2 columns):
+     - Rows 0-1: "v1" in column 2
+     - Rows 2-3: "v2" in column 2
+     - Rows 4-5: "v3" in column 2
+     - Row 6: empty
+
+  3. Arrow 1 — gray block arrow pointing right
+
+  4. Middle section — split into 4 vertically positioned groups (10px gap between them):
+     - Top group:
+       - Yellow solid-border column (v1,v1) — 2 rows
+       - Blue solid-border area (1 columns × 2 rows, internal dashed grid) — empty
+     - Second group:
+       - Yellow solid-border column (v2,v2) — 2 rows
+       - Blue solid-border area (1 columns × 2 rows, internal dashed grid) — empty
+     - Third group:
+       - Yellow solid-border column (v3,v3) — 2 rows
+       - Blue solid-border area (1 columns × 2 rows, internal dashed grid) — empty
+     - Bottom group:
+       - Green solid-border area (2 columns × 1 row, internal dashed grid) — empty
+```
+
+```bash
+rsvg-convert -f pdf -o 2-01-aggr-k-top.pdf 2-01-aggr-k-top.svg
+```

@@ -16,6 +16,32 @@ The pseudocode specification of Adjusted GGR can be found in Algorithm~\ref{alg:
 
 \subsection{$K$ Top Hit Counts in One Column} %\label{sec:adj-k-top}
 
+There could be a case when some column $A$ has a distinct value $a1$ with max
+hit count, but then it has another distinct value $a2$ with the second-highest
+hit count.
+In general, the column might have $K$ distinct values with the top hit counts
+(some of them can be ties).
+
+This is a typical case for tables with a very low cardinality metadata column
+that can easily contain distinct values with (almost) all top hit counts.
+Consider an example of a ``Device Type'' column with three distinct values
+``Android Device'', ``iOS Device'', and ``Web Browser'' -- all with the top hit counts.
+
+Another example of this case is when most columns have zero hit count distinct
+values, but one column has lots of distinct values with low but non-zero hit
+counts.
+
+We can exploit cases like this by splitting the table into $K+1$ sub-tables in
+one iteration rather than going through $K$ separate iterations.
+It also accelerates the reduction of sub-table size benefitting the table scan in
+subsequent recursions.
+
+We can characterize this approach as an extension of the ``greedy'' strategy to
+selecting multiple distinct values in one column in one iteration.
+
+Note that this adjustment does not improve the output optimality but reduces the
+number of iterations, in some cases significantly.
+
 \vspace{-0.5em}
 
 \subsection{Max Hit Count Ties Across Columns} %\label{sec:adj-ties}

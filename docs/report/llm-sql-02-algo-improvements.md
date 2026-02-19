@@ -275,22 +275,29 @@ preserves the "double" `b2, B` in the output.
 ### 4. Column with K top hit counts
 
 There could be a case when some column `A` has a distinct value `a1` with max
-hit count higher than for any other column. This makes `a1, A` a proper choice
-for the GGR iteration. However, it could be that column `A`'s second-highest hit
-count value `a2` is also the second-highest hit count value in the entire table.
-It could be going like this to up to `K` distinct values in column `A` that are
-top highest hit count values in the entire table.
+hit count, but then it has another distinct value `a2` with the second-highest
+hit count. In general, the column might have `K` distinct values with the top
+hit counts.
 
-This is actually a widespread case in practice when the low-cardinality metadata
-columns contain all top hit count distinct values.
+This is a typical case for tables with a very low cardinality metadata column
+that can easily contain distinct values with (almost) all top hit counts.
+Consider an example of a "Device Type" column with three distinct values
+"Android Device", "iOS Device", and "Web Browser" - all with the top hit counts.
+
+Another example of this case is when most columns have zero hit count distinct
+values, but one column has lots of distinct values with low but non-zero hit
+counts.
 
 We can exploit cases like this by splitting the table into `K+1` sub-tables in
-one iteration rather than going through `K` separate iterations. In addition to
-fewer iterations, this approach also speeds up the sub-tables size reduction,
-especially during the first several iterations.
+one iteration rather than going through `K` separate iterations. It also
+accelerates the reduction of sub-table size benefitting the table scan in
+subsequent recursions.
 
-Note that this adjustment does not improve the output optimality but has the
-potential to speed up the execution time.
+We can characterize this approach as an extension of the "greedy" strategy to
+selecting multiple distinct values in one column in one iteration.
+
+Note that this adjustment does not improve the output optimality but reduces the
+number of iterations, in some cases significantly.
 
 ### 5. Faster table scan with FD rules and table statistics
 

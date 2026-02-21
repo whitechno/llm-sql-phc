@@ -57,6 +57,32 @@ PHC output:
 
 All three cases also serve as recursion termination conditions.
 
+GGR Optimality
+--------------
+
+There are cases when GGR clearly produces suboptimal solutions.
+
+One case is when distinct values tie in max hit count. In other words, it is the
+case when several distinct values have the same hit count, and it is a maximum
+hit count in the table. These ``tied'' distinct values can be in the same column
+or across different columns. GGR algorithm doesn't provide any mechanism to
+select a particular distinct value and just picks the first one it encounters
+during a table scan. See an example of this case with GGR producing suboptimal
+reordering in the figure below.
+![GGR algorithm](/docs/arXiv-mlsys/tex-source/figures/claude-figures/subopt-example-1-ties.svg)
+Example of a table with max hit count ties and suboptimal GGR output:
+$HitCount(a) = HitCount(b1) = HitCount(b2)$
+
+Another case is when a distinct value in one column correlates with a distinct
+value in another column. This is not the case of FD-bound columns (even though
+it might sound similar), but, rather, the case of data heuristics when two
+distinct values in two columns happen to share the same rows. See an example of
+this case with GGR producing suboptimal reordering in the figure below.
+![GGR algorithm](/docs/arXiv-mlsys/tex-source/figures/claude-figures/subopt-example-2-corrs.svg)
+Example of a table with correlated distinct values $b$ and $c$, and suboptimal
+GGR output: $HitCount(a) = HitCount(b) + HitCount(c)$ and $R_b = R_c$
+
+
 Minor typos in equations
 ------------------------
 

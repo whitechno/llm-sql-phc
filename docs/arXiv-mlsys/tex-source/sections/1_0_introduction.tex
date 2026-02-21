@@ -219,6 +219,11 @@ This case also covers the recursion termination conditions -- a table with a sin
 However, there are cases when GGR clearly produces suboptimal solutions.
 
 One case is when distinct values tie in max hit count.
+In other words, it is the case when several distinct values have the same hit count,
+and it is a maximum hit count in the table.
+These ``tied'' distinct values can be in the same column or across different columns.
+GGR algorithm doesn't provide any mechanism to select a particular distinct value and
+just picks the first one it encounters during a table scan.
 See an example of this case with GGR producing suboptimal reordering in Figure~\ref{fig:suboptimal-ex-1}.
 
 \begin{figure}
@@ -235,10 +240,12 @@ See an example of this case with GGR producing suboptimal reordering in Figure~\
 
 Another case is when a distinct value in one column correlates with a distinct value
 in another column.
-This is not the case of FD-bound columns (even though it might sound similar),
+This is not the case of FD-bound columns (even though it might look similar),
 but, rather, the case of data heuristics when two distinct values in two columns
 happen to share the same rows.
 See an example of this case with GGR producing suboptimal reordering in Figure~\ref{fig:suboptimal-ex-2}.
+%However, we can take advantage of correlated distinct values in the same way as for
+%FD rules by combining them into one value group.
 
 \begin{figure}
     \centering

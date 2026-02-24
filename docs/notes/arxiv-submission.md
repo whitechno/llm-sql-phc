@@ -50,11 +50,3 @@ Researchers use arXiv for several strategic reasons:
 > to [Journal Name]" or "Published in [Conference]." Many authors update their
 > arXiv page once the paper has actually passed peer review elsewhere.
 
-Tech Notes
-----------
-Yes, there is an efficient algorithm for this problem. This is the Maximum
-Weight Matching problem, specifically for finding a maximum weight matching in a
-general graph. It can be solved efficiently using Edmond's Blossom Algorithm
-(also known as the Edmonds-Gallai decomposition), which runs in polynomial time
-`O(n³)` or `O(n²m)` depending on the implementation, where `n` is the number of
-nodes and `m` is the number of edges.

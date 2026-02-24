@@ -74,3 +74,20 @@ For the above example with `wA=3, wB=wC=wD=1`:
 For `wA=3, wB=wC=wD=2`:
 - Matching `{A}` gives weight 3; matching `{B,C}` gives weight 4. → Algorithm
   picks `{B,C}`.
+
+## Complexity Landscape
+
+```text
+┌─────────────┬───────────────────────────────────────┐
+│ Complexity  │             Applicable to             │
+├─────────────┼───────────────────────────────────────┤
+│ O(n³)       │ Dense and sparse graphs (classic)     │ Edmonds' blossom + primal-dual
+├─────────────┼───────────────────────────────────────┤
+│ O(nm log n) │ Sparse graphs (theoretically optimal) │ Galil, Micali & Gabow
+└─────────────┴───────────────────────────────────────┘
+```
+For `M ~ C·N` (sparse), `O(nm log n) = O(n² log n)`, which is much better than
+`O(n³)`.
+
+## Libraries
+

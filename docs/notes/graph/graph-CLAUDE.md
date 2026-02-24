@@ -1,12 +1,12 @@
-# Graph algorithm for max disjoint pairs
+# Graph algorithm for max weight disjoint pairs
 
 ## Problem Statement
 
-We have a regular graph with edges of positive weights. We can assume that
-weights are integers.
+We have a regular graph with `n` nodes and `m` edges with positive weights. We
+can assume that weights are integers.
 
-If that can influence the solution, we can also assume that number of edges `M`
-is `M ~ C*N`, where `N` is the number of nodes and `C` is some constant.
+If that can influence the solution, we can also assume that `m ~ C*n`, where `C`
+is some constant. I.e., the graph is sparse.
 
 The goal is to break the graph into disjoint pairs or singles of nodes such that
 the sum of the weights of the links connecting the pairs is maximized. The
@@ -30,15 +30,6 @@ If `wA = 3` and `wB = wC = wD = 2`, then the max-weight output is
 `B:3,4; C:1,2` with total weight `wB + wC = 4`.
 
 **Is there an efficient algorithm for this problem?**
-Yes — This Is Maximum Weight Matching
-
-Yes, there is an efficient algorithm for this problem. This is the Maximum
-Weight Matching problem, specifically for finding a maximum weight matching in a
-general graph. It can be solved efficiently using Edmond's Blossom Algorithm
-(also known as the Edmonds-Gallai decomposition), which runs in polynomial time
-`O(n³)` or `O(n²m)` depending on the implementation, where `n` is the number of
-nodes and `m` is the number of edges.
-
 The problem described is the classical Maximum Weight Matching problem on a
 general (non-bipartite) graph. The goal is to select a set of edges with no two
 sharing a node (a "matching") such that the total edge weight is maximized.
@@ -78,8 +69,50 @@ For `wA=3, wB=wC=wD=2`:
 │ O(nm log n) │ Sparse graphs (theoretically optimal) │ Galil, Micali & Gabow
 └─────────────┴───────────────────────────────────────┘
 ```
-For `M ~ C·N` (sparse), `O(nm log n) = O(n² log n)`, which is much better than
+For `m ~ C·n` (sparse), `O(nm log n) = O(n² log n)`, which is much better than
 `O(n³)`.
+
+### References
+
+**O(n³) — Edmonds' Blossom Algorithm**
+
+- Edmonds, J. (1965). "Paths, Trees, and Flowers."
+  _Canadian Journal of Mathematics_, 17, 449–467.
+  [Cambridge Core](https://www.cambridge.org/core/journals/canadian-journal-of-mathematics/article/paths-trees-and-flowers/08B492B72322C4130AE800C0610E0E21)
+  - [PDF (U. Michigan)](https://web.eecs.umich.edu/~pettie/matching/Edmonds-paths-trees-flowers.pdf)
+  - original paper introducing the O(n³) blossom algorithm
+
+**O(nm log n) — Galil, Micali & Gabow**
+
+- Galil, Z., Micali, S., & Gabow, H. (1986). "An O(EV log V) Algorithm for
+  Finding a Maximal Weighted Matching in General Graphs."
+  _SIAM Journal on Computing_, 15(1), 120–130.
+  [SIAM](https://epubs.siam.org/doi/10.1137/0215009)
+  - [PDF (U. Michigan)](https://web.eecs.umich.edu/~pettie/matching/Galil-Micali-Gabow-EVlogV-Matching.pdf)
+  - original O(nm log n) paper
+
+- Gabow, H. N. (2018). "Data Structures for Weighted Matching and Extensions to
+  b-matching and f-factors."
+  _ACM Transactions on Algorithms_, 14(3).
+  [ACM](https://dl.acm.org/doi/10.1145/3183369)
+  - [PDF (arXiv)](https://arxiv.org/abs/1611.07541)
+  - modern authoritative description; proves O(n(m + n log n)) for general
+    graphs
+
+**Surveys and good descriptions**
+
+- Galil, Z. (1986). "Efficient Algorithms for Finding Maximum Matching in
+  Graphs." _ACM Computing Surveys_, 18(1), 23–38.
+  [ACM](https://dl.acm.org/doi/10.1145/6462.6502)
+  - [PDF (ACM open access)](https://dl.acm.org/doi/pdf/10.1145/6462.6502)
+  - accessible survey covering both O(n³) and O(nm log n) algorithms
+
+- Mehlhorn, K., & Schäfer, G. (2002). "Implementation of O(nm log n) Weighted
+  Matchings in General Graphs: The Power of Data Structures."
+  _ACM Journal of Experimental Algorithmics_, 7.
+  [ACM](https://dl.acm.org/doi/abs/10.1145/944618.944622)
+  - [PDF (MPI-INF)](https://people.mpi-inf.mpg.de/~mehlhorn/ftp/WeightedMatchings.pdf)
+  - practical implementation guide for O(nm log n)
 
 ## Libraries
 

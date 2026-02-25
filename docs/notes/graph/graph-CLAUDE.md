@@ -188,5 +188,54 @@ to convert max → min.
 | [Blossom V](https://pub.ista.ac.at/~vnk/papers/blossom5.pdf)                       | O(n(m+n log n)) | yes           | min-weight perfect only | no      | no          | C++ only |
 | [PyMatching](https://pymatching.readthedocs.io/en/latest/)                         | near-linear     | special       | min-weight perfect only | yes     | yes         | active   |
 
+## Benchmarks
 
+Compare NetworkX (`nx`), rustworkx (`rx`), and mwmatching (`mw`) libraries.
 
+Measured on macOS, Python 3.14, random sparse graphs with avg degree ≈ 4
+(`m ~ 2n`). Scripts in `docs/notes/graph/script/`.
+
+**Key gotcha:** rustworkx `max_weight_matching` requires `weight_fn=lambda x: x`
+— without it the library silently uses weight=1 for every edge and returns wrong
+results.
+
+### All three libraries (n up to 2,000)
+
+|     n |     m | nx (ms) | rx (ms) | mw (ms) | nx/rx | nx/mw |                rx/mw |
+|------:|------:|--------:|--------:|--------:|------:|------:|---------------------:|
+|   100 |   386 |      46 |     1.2 |      10 |   38x |    4x |                 0.1x |
+|   300 | 1,189 |     283 |     7.5 |      27 |   38x |   10x |                 0.3x |
+|   500 | 1,983 |     850 |      22 |      67 |   38x |   13x |                 0.4x |
+|   750 | 2,980 |   1,901 |      49 |      97 |   39x |   20x |                 0.5x |
+| 1,000 | 3,984 |   3,532 |      89 |     150 |   40x |   24x |                 0.6x |
+| 1,500 | 5,977 |   8,345 |     248 |     337 |   34x |   25x |                 0.7x |
+| 2,000 | 7,982 |  13,804 |     398 |     363 |   35x |   38x | **1.1x** ← crossover |
+
+### rustworkx vs mwmatching (n up to 10,000)
+
+|      n |      m | rx (ms) | mw (ms) | rx/mw |
+|-------:|-------:|--------:|--------:|------:|
+|  1,000 |  3,984 |      90 |     144 |  0.6x |
+|  2,000 |  7,982 |     384 |     347 |  1.1x |
+|  3,000 | 11,984 |     842 |     562 |  1.5x |
+|  5,000 | 19,981 |   2,497 |   1,052 |  2.4x |
+|  7,000 | 27,974 |   4,970 |   1,437 |  3.5x |
+| 10,000 | 39,982 |  15,345 |   2,859 |  5.4x |
+
+### rustworkx vs mwmatching — large scale
+
+|      n |       m | rx (ms) | mw (ms) | rx/mw |
+|-------:|--------:|--------:|--------:|------:|
+| 10,000 |  39,982 |   7,167 |   1,644 |  4.4x |
+| 20,000 |  79,979 |  36,455 |   3,457 | 10.5x |
+| 50,000 | 199,983 | 321,399 |   9,301 | 34.6x |
+
+### Conclusions
+
+- **rustworkx** is ~35x faster than NetworkX at all sizes (same O(n³) algorithm,
+  Rust vs pure Python)
+- **Crossover at n ≈ 2,000**: mwmatching overtakes rustworkx there due to its
+  superior O(nm log n) complexity
+- At n=50,000, mwmatching is **35x faster** than rustworkx; rustworkx takes
+  ~5 min while mwmatching finishes in ~9 sec
+- For sparse graphs at scale, mwmatching (van Rantwijk v3) is the clear choice

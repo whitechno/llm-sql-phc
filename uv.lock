@@ -2,6 +2,29 @@ version = 1
 revision = 3
 requires-python = ">=3.14"
 
+[manifest]
+members = [
+    "graph-matching",
+    "llm-sql-phc",
+]
+
+[[package]]
+name = "graph-matching"
+version = "0.1.0"
+source = { virtual = "docs/notes/graph/script" }
+dependencies = [
+    { name = "mwmatching" },
+    { name = "networkx" },
+    { name = "rustworkx" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "mwmatching", editable = "../../all-github/maximum-weight-matching/python" },
+    { name = "networkx", specifier = ">=3.6.1" },
+    { name = "rustworkx", specifier = ">=0.17.1" },
+]
+
 [[package]]
 name = "llm-sql-phc"
 version = "0.1.0"
@@ -18,6 +41,11 @@ requires-dist = [
     { name = "numpy" },
     { name = "rustworkx", specifier = ">=0.17.1" },
 ]
+
+[[package]]
+name = "mwmatching"
+version = "3.0"
+source = { editable = "../../all-github/maximum-weight-matching/python" }
 
 [[package]]
 name = "networkx"

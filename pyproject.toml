@@ -1,3 +1,6 @@
+[tool.uv.workspace]
+members = ["docs/notes/graph/script"]
+
 [project]
 name = "llm-sql-phc"
 version = "0.1.0"

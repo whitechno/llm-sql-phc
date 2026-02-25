@@ -135,16 +135,51 @@ For `m ~ C·n` (sparse), `O(nm log n) = O(n² log n)`, which is much better than
 
 ### O(nm log n) — Theoretically optimal for sparse graphs
 
-[Van Rantwijk v3](https://git.jorisvr.nl/joris/maximum-weight-matching/src/tag/v3)
+**[mwmatching](https://git.jorisvr.nl/joris/maximum-weight-matching)**
 ([article](https://jorisvr.nl/article/maximum-matching))
+- Van Rantwijk's
+  v3 <https://git.jorisvr.nl/joris/maximum-weight-matching/src/tag/v3>
 - The only accessible Python implementation of the true O(nm log n) algorithm
 - Self-contained Python package (no external dependencies), also ships C++
   header
-- Not on PyPI — must install manually from his personal Gitea:
-  ```bash
-  git clone https://git.jorisvr.nl/joris/maximum-weight-matching
-  cd maximum-weight-matching/python && pip install .
-  ```
+- Not on PyPI — installed as a uv editable workspace member (see below)
+
+Installing mwmatching with uv:
+
+Clone the repo once to a local path:
+```bash
+git clone https://git.jorisvr.nl/joris/maximum-weight-matching \
+    /path/to/maximum-weight-matching
+```
+
+Create a child `pyproject.toml` in your scripts folder (e.g.
+`docs/notes/graph/script/`):
+```toml
+[project]
+name = "graph-matching"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = ["mwmatching", ...]
+
+[tool.uv.sources]
+mwmatching = { path = "/path/to/maximum-weight-matching/python", editable = true }
+```
+
+Register it as a workspace member in the root `pyproject.toml`:
+```toml
+[tool.uv.workspace]
+members = ["docs/notes/graph/script"]
+```
+
+Then install:
+```bash
+uv sync --all-packages
+```
+
+After this, `import mwmatching` works in any `uv run` script and the import
+resolves directly to the cloned source. `uv sync` alone only installs the root
+project's dependencies; `--all-packages` is required to also install workspace
+members' dependencies.
 
 **[LEMON](https://lemon.cs.elte.hu/trac/lemon)** (C++ only, no usable Python
 bindings)

@@ -74,9 +74,15 @@ For `m ~ C·n` (sparse), `O(nm log n) = O(n² log n)`, which is much better than
 
 ### References
 
+The first polynomial time algorithm for maximum matching was found by
+Edmonds [1] and subsequently improved by Gabow and others [3][4]. Currently,
+known algorithms can find maximum weighted matchings for dense graphs in time
+`O(n^3)`. For sparse graphs, there are faster algorithms that run within
+`O(nm log n)` [4].
+
 **O(n³) — Edmonds' Blossom Algorithm**
 
-- Edmonds, J. (1965). "Paths, Trees, and Flowers."
+- [1] Edmonds, J. (1965). "Paths, Trees, and Flowers."
   _Canadian Journal of Mathematics_, 17, 449–467.
   [Cambridge Core](https://www.cambridge.org/core/journals/canadian-journal-of-mathematics/article/paths-trees-and-flowers/08B492B72322C4130AE800C0610E0E21)
   - [PDF (U. Michigan)](https://web.eecs.umich.edu/~pettie/matching/Edmonds-paths-trees-flowers.pdf)

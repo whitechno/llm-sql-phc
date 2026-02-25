@@ -75,10 +75,10 @@ For `m ~ C·n` (sparse), `O(nm log n) = O(n² log n)`, which is much better than
 ### References
 
 The first polynomial time algorithm for maximum matching was found by
-Edmonds [1] and subsequently improved by Gabow and others [3][4]. Currently,
-known algorithms can find maximum weighted matchings for dense graphs in time
-`O(n^3)`. For sparse graphs, there are faster algorithms that run within
-`O(nm log n)` [4].
+Edmonds [1] and subsequently improved by Gabow and others [2][3][4][5].
+Currently, known algorithms can find maximum weighted matchings for dense graphs
+in time `O(n^3)`. For sparse graphs, there are faster algorithms that run within
+`O(nm log n)` [4][5].
 
 **O(n³) — Edmonds' Blossom Algorithm**
 
@@ -86,19 +86,33 @@ known algorithms can find maximum weighted matchings for dense graphs in time
   _Canadian Journal of Mathematics_, 17, 449–467.
   [Cambridge Core](https://www.cambridge.org/core/journals/canadian-journal-of-mathematics/article/paths-trees-and-flowers/08B492B72322C4130AE800C0610E0E21)
   - [PDF (U. Michigan)](https://web.eecs.umich.edu/~pettie/matching/Edmonds-paths-trees-flowers.pdf)
-  - original paper introducing the O(n³) blossom algorithm
+  - The first polynomial-time algorithm for maximum matching in general graphs,
+    introducing the O(n⁴) blossom algorithm.
+
+- [2] Gabow, H. N. (1973). "Implementation of Algorithms for Maximum Matching on
+  Nonbipartite Graphs." Ph.D. thesis, Stanford University.
+  [Stanford SearchWorks](https://searchworks.stanford.edu/view/2168982)
+  - [ACM](https://dl.acm.org/doi/abs/10.5555/906555)
+  - physical copy only, no free PDF; see [3] for the derived journal paper
+  - reduces time from O(n⁴) to O(n³)
+
+- [3] Gabow, H. N. (1976). "An Efficient Implementation of Edmonds' Algorithm
+  for Maximum Matching on Graphs."
+  _Journal of the ACM_, 23(2), 221–234.
+  [ACM](https://dl.acm.org/doi/10.1145/321941.321942)
+  - journal version of the thesis
 
 **O(nm log n) — Galil, Micali & Gabow**
 
-- Galil, Z., Micali, S., & Gabow, H. (1986). "An O(EV log V) Algorithm for
+- [4] Galil, Z., Micali, S., & Gabow, H. (1986). "An O(EV log V) Algorithm for
   Finding a Maximal Weighted Matching in General Graphs."
   _SIAM Journal on Computing_, 15(1), 120–130.
   [SIAM](https://epubs.siam.org/doi/10.1137/0215009)
   - [PDF (U. Michigan)](https://web.eecs.umich.edu/~pettie/matching/Galil-Micali-Gabow-EVlogV-Matching.pdf)
   - original O(nm log n) paper
 
-- Gabow, H. N. (2018). "Data Structures for Weighted Matching and Extensions to
-  b-matching and f-factors."
+- [5] Gabow, H. N. (2018). "Data Structures for Weighted Matching and Extensions
+  to b-matching and f-factors."
   _ACM Transactions on Algorithms_, 14(3).
   [ACM](https://dl.acm.org/doi/10.1145/3183369)
   - [PDF (arXiv)](https://arxiv.org/abs/1611.07541)
@@ -107,14 +121,14 @@ known algorithms can find maximum weighted matchings for dense graphs in time
 
 **Surveys and good descriptions**
 
-- Galil, Z. (1986). "Efficient Algorithms for Finding Maximum Matching in
+- [6] Galil, Z. (1986). "Efficient Algorithms for Finding Maximum Matching in
   Graphs." _ACM Computing Surveys_, 18(1), 23–38.
   [ACM](https://dl.acm.org/doi/10.1145/6462.6502)
   - [PDF (ACM open access)](https://dl.acm.org/doi/pdf/10.1145/6462.6502)
   - accessible survey covering both O(n³) and O(nm log n) algorithms
 
-- Mehlhorn, K., & Schäfer, G. (2002). "Implementation of O(nm log n) Weighted
-  Matchings in General Graphs: The Power of Data Structures."
+- [7] Mehlhorn, K., & Schäfer, G. (2002). "Implementation of O(nm log n)
+  Weighted Matchings in General Graphs: The Power of Data Structures."
   _ACM Journal of Experimental Algorithmics_, 7.
   [ACM](https://dl.acm.org/doi/abs/10.1145/944618.944622)
   - [PDF (MPI-INF)](https://people.mpi-inf.mpg.de/~mehlhorn/ftp/WeightedMatchings.pdf)

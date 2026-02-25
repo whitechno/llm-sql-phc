@@ -120,7 +120,7 @@ For `m ~ C·n` (sparse), `O(nm log n) = O(n² log n)`, which is much better than
 
 **[NetworkX](https://networkx.org/)** `networkx.max_weight_matching()`
 ([docs](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.matching.max_weight_matching.html))
-- Pure Python, Edmonds' blossom + primal-dual
+- Pure Python, Edmonds' blossom + primal-dual O(n³) algorithm
 - Uses exact integer arithmetic when all weights are integers
 - Slow for large graphs due to Python overhead
 - `pip install networkx`
@@ -128,7 +128,7 @@ For `m ~ C·n` (sparse), `O(nm log n) = O(n² log n)`, which is much better than
 **[rustworkx](https://www.rustworkx.org/)** `rustworkx.max_weight_matching()`
 ([docs](https://www.rustworkx.org/apiref/rustworkx.max_weight_matching.html),
 [GitHub](https://github.com/Qiskit/rustworkx))
-- Rust port of van Rantwijk's Python code (same O(n³) algorithm)
+- Rust port of NetworkX library (same O(n³) algorithm for MWM)
 - ~10–50x faster than NetworkX in practice due to Rust backend
 - IBM/Qiskit project
 - `pip install rustworkx`
@@ -188,7 +188,7 @@ to convert max → min.
 | [Blossom V](https://pub.ista.ac.at/~vnk/papers/blossom5.pdf)                       | O(n(m+n log n)) | yes           | min-weight perfect only | no      | no          | C++ only |
 | [PyMatching](https://pymatching.readthedocs.io/en/latest/)                         | near-linear     | special       | min-weight perfect only | yes     | yes         | active   |
 
-## Benchmarks
+## Benchmarks: NetworkX vs rustworkx vs mwmatching
 
 Compare NetworkX (`nx`), rustworkx (`rx`), and mwmatching (`mw`) libraries.
 

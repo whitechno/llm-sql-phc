@@ -2,16 +2,18 @@
   <!-- Define styles -->
   <defs>
     <style>
-      .node { fill: #fef3c7; stroke: darkorange; stroke-width: 2; } <!-- #f59e0b - slightly more yellow/golden stroke -->
+      .node { fill: #fef3c7; stroke: orange; stroke-width: 1; } <!-- #f59e0b - slightly more yellow/golden stroke -->
+      .node-matched { fill: #fef3c7; stroke: darkorange; stroke-width: 4; }
       .node-text { font-family: Arial, sans-serif; font-size: 32px; font-weight: bold; text-anchor: middle; dominant-baseline: middle; }
       .edge { stroke: gray; stroke-width: 2; }
+      .edge-matched { stroke: black; stroke-width: 4; }
       .edge-text { font-family: Arial, sans-serif; font-size: 28px; fill: gray; text-anchor: middle; dominant-baseline: middle; }
     </style>
   </defs>
 
   <!-- Edges (drawn first so they appear behind nodes) -->
   <!-- A: 2,3 -->
-  <line class="edge" x1="100" y1="300" x2="300" y2="300" style="stroke: black; stroke-width: 4;" />
+  <line class="edge-matched" x1="100" y1="300" x2="300" y2="300" />
   <text class="edge-text" x="200" y="285" style="fill: black;">3</text>
 
   <!-- B: 3,4 -->
@@ -32,11 +34,11 @@
   <text class="node-text" x="100" y="100">1</text>
 
   <!-- Node 2 -->
-  <circle class="node" cx="100" cy="300" r="30" />
+  <circle class="node-matched" cx="100" cy="300" r="30" />
   <text class="node-text" x="100" y="300">2</text>
 
   <!-- Node 3 -->
-  <circle class="node" cx="300" cy="300" r="30" />
+  <circle class="node-matched" cx="300" cy="300" r="30" />
   <text class="node-text" x="300" y="300">3</text>
 
   <!-- Node 4 -->

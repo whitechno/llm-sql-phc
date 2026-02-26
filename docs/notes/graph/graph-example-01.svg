@@ -2,7 +2,7 @@
   <!-- Define styles -->
   <defs>
     <style>
-      .node { fill: #fef3c7; stroke: darkorange; stroke-width: 2; } <!-- #f59e0b - slightly more yellow/golden stroke -->
+      .node { fill: #fef3c7; stroke: orange; stroke-width: 1; } <!-- #f59e0b - slightly more yellow/golden stroke -->
       .node-text { font-family: Arial, sans-serif; font-size: 32px; font-weight: bold; text-anchor: middle; dominant-baseline: middle; }
       .edge { stroke: gray; stroke-width: 2; }
       .edge-text { font-family: Arial, sans-serif; font-size: 32px; fill: red; text-anchor: middle; dominant-baseline: middle; }

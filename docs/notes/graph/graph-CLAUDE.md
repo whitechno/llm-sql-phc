@@ -21,7 +21,7 @@ C: 1,2
 D: 1,3
 ```
 
-<img src="graph-example.svg" width="150" alt="graph-example">
+<img src="graph-example-01.svg" width="150" alt="graph-example">
 
 If `wA = 3` and `wB = wC = wD = 1`, then the max-weight output is `A:2,3; 1; 4`
 with total weight `wA = 3`.

@@ -26,8 +26,12 @@ D: 1,3
 If `wA = 3` and `wB = wC = wD = 1`, then the max-weight output is `A:2,3; 1; 4`
 with total weight `wA = 3`.
 
+<img src="graph-example-02.svg" width="150" alt="graph-example">
+
 If `wA = 3` and `wB = wC = wD = 2`, then the max-weight output is
 `B:3,4; C:1,2` with total weight `wB + wC = 4`.
+
+<img src="graph-example-03.svg" width="150" alt="graph-example">
 
 **Is there an efficient algorithm for this problem?**
 The problem described is the classical Maximum Weight Matching problem on a

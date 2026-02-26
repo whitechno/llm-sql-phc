@@ -1,4 +1,4 @@
-# Graph algorithm for max weight disjoint pairs
+# Graph algorithms for max weight disjoint pairs
 
 ## Problem Statement
 
@@ -247,8 +247,8 @@ to convert max → min.
 
 Compare NetworkX (`nx`), rustworkx (`rx`), and mwmatching (`mw`) libraries.
 
-Measured on macOS, Python 3.14, random sparse graphs with avg degree ≈ 4
-(`m ~ 2n`). Scripts in `docs/notes/graph/script/`.
+Measured on macOS, Python 3.14, random sparse graphs generated with avg edges
+per node ≈ 4 (`m ~ 4n`). Scripts in `docs/notes/graph/script/`.
 
 **Key gotcha:** rustworkx `max_weight_matching` requires `weight_fn=lambda x: x`
 — without it the library silently uses weight=1 for every edge and returns wrong
@@ -279,11 +279,16 @@ results.
 
 ### rustworkx vs mwmatching — large scale
 
-|      n |       m | rx (ms) | mw (ms) | rx/mw |
-|-------:|--------:|--------:|--------:|------:|
-| 10,000 |  39,982 |   7,167 |   1,644 |  4.4x |
-| 20,000 |  79,979 |  36,455 |   3,457 | 10.5x |
-| 50,000 | 199,983 | 321,399 |   9,301 | 34.6x |
+|       n |       m | rx (ms) | mw (ms) | rx/mw |
+|--------:|--------:|--------:|--------:|------:|
+|  10,000 |  39,982 |   7,049 |   1,571 |  4.5x |
+|  20,000 |  79,979 |  39,312 |   3,675 | 10.7x |
+|  50,000 | 199,983 | 329,027 |   9,173 | 35.9x |
+| 100,000 | 399,976 |       — |  19,876 |     — |
+
+### Plot of the combined benchmark data
+
+<img src="bench_plot.svg" width="600" alt="graph-example">
 
 ### Conclusions
 

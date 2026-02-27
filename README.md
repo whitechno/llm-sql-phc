@@ -55,7 +55,7 @@ Row   Category     Brand      Product    Code
 
 ### Run `main.py`
 
-Run `uv run python main.py` to see this output:
+Run `uv run python src/main.py` to see this output:
 ```text
 Original Table:
 ----------------------------------------------------------------------

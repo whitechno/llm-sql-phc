@@ -78,7 +78,7 @@ wheels = [
 [[package]]
 name = "graph-matching"
 version = "0.1.0"
-source = { virtual = "docs/notes/graph/script" }
+source = { virtual = "docs/notes/graph-mwm/script" }
 dependencies = [
     { name = "matplotlib" },
     { name = "mwmatching" },

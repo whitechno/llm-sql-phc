@@ -9,4 +9,6 @@ dependencies = [
 ]
 
 [tool.uv.workspace]
-members = ["docs/notes/graph/script"]
+# if changed, run:
+# rm uv.lock && uv sync --all-packages
+members = ["docs/notes/graph-mwm/script"]

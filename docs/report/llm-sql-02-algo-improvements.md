@@ -450,3 +450,32 @@ between some distinct values. Also, as recursion iterations step down to
 distinct values with fewer rows, the probability of them sharing the same rows
 increases. As a general recommendation, it is worth considering this heuristic
 adjustment only if the table has a high correlation between distinct values.
+
+### 7. Combine value groups into a single block
+
+This is basically the same as the previous section, but reworded and elevated.
+
+If two distinct values `a` and `b` (from two **different** columns `A` and `B`)
+share the same rows in the table, then we can combine them into a single "value
+block" `[(a,A),(b,B)]` spanning rows $R_{ab} = R_a = R_b$ and having a combined
+hit count of $HC(a,A) + HC(b,B)$.
+
+In our experience, this is a very common situation in real-world data sets.
+However, it is always a good idea to check if this is the case for your specific
+table.
+
+If two distinct values `a` and `b` (from two **different** columns `A` and `B`)
+share the same rows in the table, $R_a = R_b$, and have hit
+counts $HC_a = \text{len}(a)^2 \times (|R_a| - 1)$
+and $HC_b = \text{len}(b)^2 \times (|R_b| - 1)$, then we can combine them into a
+single "value block" `[(a,A),(b,B)]` spanning rows $R_{ab} = R_a = R_b$.
+
+Table examples
+--------------
+
+There is a good example of a real data table that gives an interesting max hit
+count case to think about: what is the optimal solution? and how it can be
+expressed as a hyper-graph? Here it is: A table with two columns - “device
+category” `cat` and “hardware type” `hwt`
+Only two d.v.’s in `cat`: “AND” and “APL”. And several in `hwt`: “TV”, “Phone”,
+“Tablet”, “STB”, and “Desktop”.

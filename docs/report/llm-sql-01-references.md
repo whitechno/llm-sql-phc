@@ -126,5 +126,19 @@ Then line 27 should be changed to
 C_HC, _, b_vals <- HitCount(b_v, b_c, T, FD)
 ```
 
-Figures
--------
+Evaluation Benchmark datasets
+-----------------------------
+
+Accessibility Summary
+
+| Dataset  | Status      | Downloaded                | License / Access                         |
+|----------|-------------|---------------------------|------------------------------------------|
+| Movies   | ✅ Available | ✅ `movies/movies.jsonl`   | Free (Kaggle / GitHub mirror)            |
+| Products | ✅ Available | ✅ `amazon/products.jsonl` | Free (McAuley Lab 2023, direct download) |
+| BIRD     | ✅ Available | ✅ `bird/dev_20240627/`    | Free (bird-bench.github.io)              |
+| PDMX     | ✅ Available | ✅ `pdmx/pdmx.jsonl`       | Open access (Zenodo CC)                  |
+| Beer     | ✅ Available | ✅ `beer/beer.jsonl`       | Free (mcauleylab.ucsd.edu, SNAP removed) |
+| SQuAD    | ✅ Available | ✅ `squad/train-v1.1.json` | CC BY-SA 4.0 (Stanford official)         |
+| FEVER    | ✅ Available | ✅ `fever/train.jsonl`     | CC BY-SA 3.0 (fever.ai official)         |
+
+**All 7 datasets successfully downloaded.**

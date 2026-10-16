@@ -47,20 +47,20 @@ weighted generalization runs in:
 How It Works (High Level):
 1. Start with an empty matching.
 2. Repeatedly find augmenting paths — paths that alternate between non-matching
-   and matching edges, starting and ending at unmatched nodes.
+	 and matching edges, starting and ending at unmatched nodes.
 3. The key complication for general (non-bipartite) graphs is handling
-   odd-length cycles ("blossoms"), which the algorithm contracts and then
-   expands.
+	 odd-length cycles ("blossoms"), which the algorithm contracts and then
+	 expands.
 4. Weights are handled via dual variables (from LP duality), ensuring
-   optimality.
+	 optimality.
 
 For the above example with `wA=3, wB=wC=wD=1`:
 - Matching `{A}` gives weight 3; matching `{B,C}` gives weight 2. → Algorithm
-  picks `{A}`.
+	picks `{A}`.
 
 For `wA=3, wB=wC=wD=2`:
 - Matching `{A}` gives weight 3; matching `{B,C}` gives weight 4. → Algorithm
-  picks `{B,C}`.
+	picks `{B,C}`.
 
 ## Complexity Landscape
 
@@ -84,67 +84,67 @@ Currently, known algorithms can find maximum weighted matchings for dense graphs
 in time `O(n^3)`. For sparse graphs, there are faster algorithms that run within
 `O(nm log n)` [4][5].
 
-**O(n³) — Edmonds' Blossom Algorithm**
+**O (n³) — Edmonds' Blossom Algorithm**
 
 - [1] Edmonds, J. (1965). "Paths, Trees, and Flowers."
-  _Canadian Journal of Mathematics_, 17, 449–467.
-  [Cambridge Core](https://www.cambridge.org/core/journals/canadian-journal-of-mathematics/article/paths-trees-and-flowers/08B492B72322C4130AE800C0610E0E21)
-  - [PDF (U. Michigan)](https://web.eecs.umich.edu/~pettie/matching/Edmonds-paths-trees-flowers.pdf)
-  - The first polynomial-time algorithm for maximum matching in general graphs,
-    introducing the O(n⁴) blossom algorithm.
+	_Canadian Journal of Mathematics_, 17, 449–467.
+	[Cambridge Core](https://www.cambridge.org/core/journals/canadian-journal-of-mathematics/article/paths-trees-and-flowers/08B492B72322C4130AE800C0610E0E21)
+	- [PDF (U. Michigan)](https://web.eecs.umich.edu/~pettie/matching/Edmonds-paths-trees-flowers.pdf)
+	- The first polynomial-time algorithm for maximum matching in general graphs,
+		introducing the O (n⁴) blossom algorithm.
 
 - [2] Gabow, H. N. (1973). "Implementation of Algorithms for Maximum Matching on
-  Nonbipartite Graphs." Ph.D. thesis, Stanford University.
-  [Stanford SearchWorks](https://searchworks.stanford.edu/view/2168982)
-  - [ACM](https://dl.acm.org/doi/abs/10.5555/906555)
-  - physical copy only, no free PDF; see [3] for the derived journal paper
-  - reduces time from O(n⁴) to O(n³)
+	Nonbipartite Graphs." Ph.D. thesis, Stanford University.
+	[Stanford SearchWorks](https://searchworks.stanford.edu/view/2168982)
+	- [ACM](https://dl.acm.org/doi/abs/10.5555/906555)
+	- physical copy only, no free PDF; see [3] for the derived journal paper
+	- reduces time from O (n⁴) to O (n³)
 
 - [3] Gabow, H. N. (1976). "An Efficient Implementation of Edmonds' Algorithm
-  for Maximum Matching on Graphs."
-  _Journal of the ACM_, 23(2), 221–234.
-  [ACM](https://dl.acm.org/doi/10.1145/321941.321942)
-  - journal version of the thesis
+	for Maximum Matching on Graphs."
+	_Journal of the ACM_, 23 (2), 221–234.
+	[ACM](https://dl.acm.org/doi/10.1145/321941.321942)
+	- journal version of the thesis
 
-**O(nm log n) — Galil, Micali & Gabow**
+**O (nm log n) — Galil, Micali & Gabow**
 
-- [4] Galil, Z., Micali, S., & Gabow, H. (1986). "An O(EV log V) Algorithm for
-  Finding a Maximal Weighted Matching in General Graphs."
-  _SIAM Journal on Computing_, 15(1), 120–130.
-  [SIAM](https://epubs.siam.org/doi/10.1137/0215009)
-  - [PDF (U. Michigan)](https://web.eecs.umich.edu/~pettie/matching/Galil-Micali-Gabow-EVlogV-Matching.pdf)
-  - original O(nm log n) paper
+- [4] Galil, Z., Micali, S., & Gabow, H. (1986). "An O (EV log V) Algorithm for
+	Finding a Maximal Weighted Matching in General Graphs."
+	_SIAM Journal on Computing_, 15 (1), 120–130.
+	[SIAM](https://epubs.siam.org/doi/10.1137/0215009)
+	- [PDF (U. Michigan)](https://web.eecs.umich.edu/~pettie/matching/Galil-Micali-Gabow-EVlogV-Matching.pdf)
+	- original O (nm log n) paper
 
 - [5] Gabow, H. N. (2018). "Data Structures for Weighted Matching and Extensions
-  to b-matching and f-factors."
-  _ACM Transactions on Algorithms_, 14(3).
-  [ACM](https://dl.acm.org/doi/10.1145/3183369)
-  - [PDF (arXiv)](https://arxiv.org/abs/1611.07541)
-  - modern authoritative description; proves O(n(m + n log n)) for general
-    graphs
+	to b-matching and f-factors."
+	_ACM Transactions on Algorithms_, 14 (3).
+	[ACM](https://dl.acm.org/doi/10.1145/3183369)
+	- [PDF (arXiv)](https://arxiv.org/abs/1611.07541)
+	- modern authoritative description; proves O (n (m + n log n)) for general
+		graphs
 
 **Surveys and good descriptions**
 
 - [6] Galil, Z. (1986). "Efficient Algorithms for Finding Maximum Matching in
-  Graphs." _ACM Computing Surveys_, 18(1), 23–38.
-  [ACM](https://dl.acm.org/doi/10.1145/6462.6502)
-  - [PDF (ACM open access)](https://dl.acm.org/doi/pdf/10.1145/6462.6502)
-  - accessible survey covering both O(n³) and O(nm log n) algorithms
+	Graphs." _ACM Computing Surveys_, 18 (1), 23–38.
+	[ACM](https://dl.acm.org/doi/10.1145/6462.6502)
+	- [PDF (ACM open access)](https://dl.acm.org/doi/pdf/10.1145/6462.6502)
+	- accessible survey covering both O (n³) and O (nm log n) algorithms
 
-- [7] Mehlhorn, K., & Schäfer, G. (2002). "Implementation of O(nm log n)
-  Weighted Matchings in General Graphs: The Power of Data Structures."
-  _ACM Journal of Experimental Algorithmics_, 7.
-  [ACM](https://dl.acm.org/doi/abs/10.1145/944618.944622)
-  - [PDF (MPI-INF)](https://people.mpi-inf.mpg.de/~mehlhorn/ftp/WeightedMatchings.pdf)
-  - practical implementation guide for O(nm log n)
+- [7] Mehlhorn, K., & Schäfer, G. (2002). "Implementation of O (nm log n)
+	Weighted Matchings in General Graphs: The Power of Data Structures."
+	_ACM Journal of Experimental Algorithmics_, 7.
+	[ACM](https://dl.acm.org/doi/abs/10.1145/944618.944622)
+	- [PDF (MPI-INF)](https://people.mpi-inf.mpg.de/~mehlhorn/ftp/WeightedMatchings.pdf)
+	- practical implementation guide for O (nm log n)
 
 ## Libraries
 
-### O(n³) — Easy to install, actively maintained
+### O (n³) — Easy to install, actively maintained
 
 **[NetworkX](https://networkx.org/)** `networkx.max_weight_matching()`
 ([docs](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.matching.max_weight_matching.html))
-- Pure Python, Edmonds' blossom + primal-dual O(n³) algorithm
+- Pure Python, Edmonds' blossom + primal-dual O (n³) algorithm
 - Uses exact integer arithmetic when all weights are integers
 - Slow for large graphs due to Python overhead
 - `pip install networkx`
@@ -152,20 +152,24 @@ in time `O(n^3)`. For sparse graphs, there are faster algorithms that run within
 **[rustworkx](https://www.rustworkx.org/)** `rustworkx.max_weight_matching()`
 ([docs](https://www.rustworkx.org/apiref/rustworkx.max_weight_matching.html),
 [GitHub](https://github.com/Qiskit/rustworkx))
-- Rust port of NetworkX library (same O(n³) algorithm for MWM)
+- [rustworkx: A High-Performance Graph Library for Python](
+	https://arxiv.org/abs/2110.15221) arXiv 2022
+- Rust port of NetworkX library (same O (n³) algorithm for MWM)
 - ~10–50x faster than NetworkX in practice due to Rust backend
 - IBM/Qiskit project
 - `pip install rustworkx`
 
-### O(nm log n) — Theoretically optimal for sparse graphs
+### O (nm log n) — Theoretically optimal for sparse graphs
 
 **[mwmatching](https://git.jorisvr.nl/joris/maximum-weight-matching)**
 ([article](https://jorisvr.nl/article/maximum-matching))
-- Van Rantwijk's
-  v3 <https://git.jorisvr.nl/joris/maximum-weight-matching/src/tag/v3>
-- The only accessible Python implementation of the true O(nm log n) algorithm
+- Van Rantwijk's v3
+	<https://git.jorisvr.nl/joris/maximum-weight-matching/src/tag/v3>
+- Description of v3 algorithm
+	<https://git.jorisvr.nl/joris/maximum-weight-matching/src/tag/v3/doc/Algorithm.md>
+- The only accessible Python implementation of the true O (nm log n) algorithm
 - Self-contained Python package (no external dependencies), also ships C++
-  header
+	header
 - Not on PyPI — installed as a uv editable workspace member (see below)
 
 Installing mwmatching with uv:
@@ -208,12 +212,12 @@ members' dependencies.
 **[LEMON](https://lemon.cs.elte.hu/trac/lemon)** (C++ only, no usable Python
 bindings)
 ([matching API](http://lemon.cs.elte.hu/pub/doc/latest-svn/a00852.html))
-- Production-quality O(nm log n) `MaxWeightedMatching` for general graphs
+- Production-quality O (nm log n) `MaxWeightedMatching` for general graphs
 - Reference C++ implementation, part of COIN-OR project
 - [pylemon](https://pylemon.readthedocs.io/en/latest/)
-  (v0.0.3, stale since 2022) and [cylemon](https://github.com/cstraehl/cylemon)
-  ("very partial" Cython) exist but neither exposes general graph max weight
-  matching usably
+	(v0.0.3, stale since 2022) and [cylemon](https://github.com/cstraehl/cylemon)
+	("very partial" Cython) exist but neither exposes general graph max weight
+	matching usably
 
 ### Specialized / Not applicable
 
@@ -233,7 +237,7 @@ to convert max → min.
 **[PyMatching](https://pymatching.readthedocs.io/en/latest/)**
 ([GitHub](https://github.com/oscarhiggott/PyMatching), [PyPI](https://pypi.org/project/PyMatching/))
 - Solves min-weight perfect matching on **restricted graph topologies** only
-  (designed for quantum error correction surface codes)
+	(designed for quantum error correction surface codes)
 - Cannot be repurposed for general graphs — not applicable
 
 ### Summary table
@@ -296,10 +300,10 @@ results.
 
 ### Conclusions
 
-- **rustworkx** is ~35x faster than NetworkX at all sizes (same O(n³) algorithm,
-  Rust vs pure Python)
+- **rustworkx** is ~35x faster than NetworkX at all sizes (same O (n³)
+	algorithm, Rust vs pure Python)
 - **Crossover at n ≈ 2,000**: mwmatching overtakes rustworkx there due to its
-  superior O(nm log n) complexity
+	superior O (nm log n) complexity
 - At n=50,000, mwmatching is **35x faster** than rustworkx; rustworkx takes
-  ~5 min while mwmatching finishes in ~9 sec
+	~5 min while mwmatching finishes in ~9 sec
 - For sparse graphs at scale, mwmatching (van Rantwijk v3) is the clear choice
